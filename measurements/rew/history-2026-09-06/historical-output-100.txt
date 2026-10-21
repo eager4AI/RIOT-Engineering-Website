@@ -1,0 +1,150 @@
+CLASS roomeqwizard.MeasData nfields 148
+alignSPLOffsetCumulative 0.0
+alignSPLOffsetLast 0.0
+asdOffset 0.0
+audioDataLength 0
+audioDataOffset 0
+calR 0.0
+dBcOffset 0.0
+dataLength 957
+endFreq 20037.845703125
+fdwEndFreq 20037.845703125
+fdwFrac 48.0
+fdwPPO 96
+fdwStartFreq 20.1416015625
+freqStep 0.3662109673023224
+hfFallSlope 0.5
+hfFallStart 1000
+hpApplied False
+impedanceCal 1.0
+inputR 0.0
+isFromRTA False
+isFsafFileMeasurement False
+isGroupPlaceHolder False
+isLogSpaced True
+lastUnwrapOffsetFreq 0.0
+leadsR 0.0
+lfRiseEnd 20
+lfRiseSlope 1.0
+lfRiseStart 200
+logStep 1.007246412223704
+logStepLog 0.007220283130832763
+numSweeps 1
+octaveFrac 24.0
+overlaySelected False
+phaseIsUnwrapped False
+ppo 96
+rawGDOctaveFrac 48.0
+refR 0.0
+roomHeight 2.38
+roomLength 5.0
+roomWidth 4.0
+sampleRate 48000
+sourceFileDate 1788709752279
+sourceType 5
+speakerBassMgmtShape 0
+speakerCutoff 80
+startFreq 20.1416015625
+useBars False
+validEndFreq 19750.56640625
+validStartFreq 20.434568405151367
+xOverHPCutoff 100
+xOverLPCutoff 1000
+addRoomCurve JObject java.lang.Boolean
+calDataLimitApplied JObject java.lang.Boolean
+ceaData None
+dBVInputOffset JObject java.lang.Double
+dBVOutputOffset JObject java.lang.Double
+distortionData JObject roomeqwizard.DistortionData
+eightc None
+eightcPosnsMeasured None
+eightcProfilePosnIDs None
+eightcProfileSt None
+eightcRoomID None
+eightcRoomName None
+enable JObject java.lang.Boolean
+eqConfig None
+eqName 'Generic'
+fdwImag JArray [F len 957
+fdwPeakTime JObject java.lang.Double
+fdwReal JArray [F len 957
+filterSet JObject roomeqwizard.FilterSet
+filterSetWhenMeasured None
+gdValues JArray [F len 957
+groupColor None
+groupName None
+groupNotes None
+groupUuid None
+impedanceCalType None
+index3D None
+inputVolume None
+ir None
+irData JObject roomeqwizard.IRData
+jre '11.0.29 64-bit'
+label3D None
+locked JObject java.lang.Boolean
+measNotes ''
+meterCal JObject roomeqwizard.CalData
+micSensitivity JObject java.lang.Double
+noiseFilter list ['ENUM', ClassDesc(name='roomeqwizard.NoiseFilter', suid=0, flags=18, fields=[],
+osName 'linux'
+osVersion '6.1.0-52-amd64'
+outputName 'Output device not selected, no output selected, L, volume: no control'
+outputVolume None
+peaks None
+phaseValues JArray [F len 957
+rawGDValues JArray [F len 957
+rawPhaseValues None
+rawSourceSet None
+rawUnwPhaseValues JArray [F len 957
+rawValues JArray [F len 957
+refResistancedB JObject java.lang.Double
+rewSubVersion JObject java.lang.Integer
+rewVersion JObject java.lang.Integer
+roomData None
+rtaDist None
+rtaLevelAdjustApplied None
+rtaOctaveFrac None
+savedColor JObject java.awt.Color
+scCal JObject roomeqwizard.CalData
+selectedOnOverlay JObject java.lang.Boolean
+shortDesc 'L 12s'
+sigGenLevelSt '-12 dBFS'
+sourceCalOffsets None
+sourceFileFormat '256k Log Swept Sine, 1 sweep at -12.0 dBFS\nwith no timing reference'
+sourceFileName 'U18dB [plughw:2,0], no input selected, L, volume: no control'
+sourceMax None
+sourceMaxdBFS None
+sourceMin None
+sourceMindBFS None
+sourceSet None
+sourceWeighting None
+sourcedBOffsets None
+speakerBassMgmtSlope None
+speakerBassMgmtXOverSlope list ['ENUM', ClassDesc(name='roomeqwizard.XOverSlope', suid=0, flags=18, fields=[], 
+speakerLocn None
+splCalOffset JObject java.lang.Double
+splValues JArray [F len 957
+steppedSineResults None
+subLFCutoff JObject java.lang.Integer
+subLFSlope None
+subLFXOverSlope list ['ENUM', ClassDesc(name='roomeqwizard.XOverSlope', suid=0, flags=18, fields=[], 
+sweep JObject roomeqwizard.MeasSweepFunction
+sweepLevel JObject java.lang.Double
+tails None
+targetLevel JObject java.lang.Double
+targetShape list ['ENUM', ClassDesc(name='roomeqwizard.TargetShape', suid=0, flags=18, fields=[],
+timingRefInputName None
+timingRefName None
+timingReferenceMode list ['ENUM', ClassDesc(name='roomeqwizard.TimingReference', suid=0, flags=18, fields
+ts None
+unit3D None
+unwPhaseRefPeak JArray [F len 957
+unwPhaseValues JArray [F len 957
+usesEmbeddedCalData JObject java.lang.Boolean
+uuid None
+uuid2 JObject roomeqwizard.UUID
+versionSt ' beta 118'
+xOverHPChoice list ['ENUM', ClassDesc(name='roomeqwizard.XOverChoice', suid=0, flags=18, fields=[],
+xOverLPChoice list ['ENUM', ClassDesc(name='roomeqwizard.XOverChoice', suid=0, flags=18, fields=[],
+

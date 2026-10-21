@@ -1,0 +1,1876 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>REW Gain Alignment source transcript</title><style>body{max-width:1000px;margin:40px auto;padding:0 20px;font:16px/1.6 system-ui}pre{white-space:pre-wrap;overflow-wrap:anywhere}img{max-width:100%;height:auto}article{border-top:1px solid #ddd;margin-top:30px}small{color:#555}</style><h1>REW Gain Alignment</h1><p>Recovered source transcript, 6–7 September 2026. Historical assistant statements retain their original wording and are not automatically verified conclusions.</p><p><a href="https://chatgpt.com/share/6ad15ab7-8824-83eb-ab2f-4887aca9e51a?ogimg=plain">Original shared conversation</a> · <a href="conversation-record.json">Structured source record</a></p>
+<article id="m3"><h2>Source message 3 · user</h2><small>2026-09-06T15:22:39.098000+00:00 · 0f1544a1-9f9f-4ff7-8c91-9cfd04a4aa65</small>
+<pre>right, let&#x27;s do some REW. first let&#x27;s use tone generator to levl the gain. because i don&#x27;t know for certain the level of gain of the pioneer SA-8100 and the ayima a70, the most reliable way would not be the V in at amp, so i though to use REW tone generator to adjus till same db reached on a pink noise signal, 3kz for CD, 1khz for 10,s and 100db for 12</pre>
+</article>
+<article id="m11"><h2>Source message 11 · assistant</h2><small>2026-09-06T15:22:39.546944+00:00 · 842908bb-a427-4806-8617-f0d91fb68fee</small>
+<pre>[Likely] I’d change one thing: **don’t use full pink noise and don’t trust a single SPL point as the final gain setting**, especially on the 12s where the room/SBIR around 80–90 Hz can badly fool you.
+
+[Certain] Your basic principle is correct though: **match the bands acoustically with REW**, not by measuring amplifier input voltage. That automatically includes amplifier voltage gain, driver sensitivity, crossover insertion loss, and the attenuation from your band gain controls.
+
+I’d do the first-pass gain alignment like this:
+
+| Band | Generator | Frequency | Why |
+|---|---|---:|---|
+| 12&quot; | sine | **150 Hz** | safely above your 80–90 Hz SBIR problem, well below 300 Hz XO |
+| 10&quot; | sine | **1 kHz** | comfortably inside 300–1900 Hz band |
+| CD | sine | **3 kHz** | comfortably above 1.9 kHz XO |
+
+[Likely] I would **not use 100 Hz for the 12s** initially. Given what we already know about your room, even if the actual cancellation is centred at 80–90 Hz, 100 Hz could still be on the shoulder of that cancellation. **150 Hz is a cleaner gain-reference point.**
+
+### Procedure
+
+[Certain] Put the REW microphone at the listening position, exactly where your head normally is. Keep the microphone position fixed for all three measurements.
+
+Use **one speaker only** initially — left, for example — and mute/disconnect the other speaker. Then mute all bands except the one being adjusted.
+
+Set REW Generator to a sine wave and start conservatively, something like **-30 dBFS**. Raise the system volume until you&#x27;re seeing roughly **70–75 dB SPL** at the microphone. There is absolutely no reason to do gain alignment at high SPL.
+
+Then:
+
+**12&quot;:**
+150 Hz → measure SPL → call this your reference.
+
+Suppose it reads:
+
+&gt; 74.0 dB
+
+Leave the master volume completely untouched.
+
+**10&quot;:**
+1 kHz → adjust the **10&quot; crossover output gain** until REW reads approximately:
+
+&gt; 74.0 dB
+
+**CD:**
+3 kHz → adjust your **CD Alps trimmer / crossover gain** until:
+
+&gt; 74.0 dB
+
+[Certain] At that point you have removed the unknown Pioneer/Aiyima/Gainclone gains from the equation. Whatever their actual voltage gains are becomes irrelevant.
+
+---
+
+[Likely] But that is only **coarse gain alignment**. Afterward I would immediately run three individual REW sweeps:
+
+- 12 only
+- 10 only
+- CD only
+
+with exactly the same master volume and microphone position.
+
+That will tell us much more than the tone-generator values because we&#x27;ll see the **actual acoustic level through each band&#x27;s useful passband**.
+
+For example, if the 10&quot; happens to have a +2 dB bump at 1 kHz, matching it to the 12&quot; at exactly 1 kHz would leave the whole midband approximately 2 dB too quiet.
+
+So the workflow I&#x27;d use is:
+
+**tone generator → rough gain matching → isolated sweeps → average-band correction → crossover/TA work.**
+
+[Likely] For the isolated sweep analysis, I&#x27;d care roughly about these regions rather than one frequency:
+
+- **12&quot;: 120–220 Hz**
+- **10&quot;: 500–1500 Hz**
+- **CD: 2.5–6 kHz**
+
+and ignore the crossover transition regions initially.
+
+Once those three are roughly sitting at the same acoustic level, **then we turn all three on and start dealing with the 300 Hz and ~1.9 kHz summation/phase/time alignment.**
+
+And yes — I assume your last “100db for 12” meant **100 Hz**, not 100 dB. 😁</pre>
+</article>
+<article id="m12"><h2>Source message 12 · user</h2><small>2026-09-06T15:27:39.597000+00:00 · deac580f-f2c7-4031-8cff-8d14bc435520</small>
+<pre>ok, but how do I measure the spl and play the pink noise at the same time in REW?</pre>
+</article>
+<article id="m20"><h2>Source message 20 · assistant</h2><small>2026-09-06T15:27:43.765009+00:00 · a1bf5922-ba76-42bd-a6e2-6caaeb12723e</small>
+<pre>[Certain] Use **REW Generator + SPL Meter at the same time**. You do not need to stop one to use the other. REW explicitly supports using the generator while the meter/RTA is reading the mic input. citeturn118188search11turn118188search0
+
+Do this:
+
+1. Open **Generator** in REW.
+2. Select your signal:
+   - 150 Hz sine for the 12&quot;
+   - 1 kHz sine for the 10&quot;
+   - 3 kHz sine for the CD
+3. Start the generator.
+4. Then open **SPL Meter** from the REW toolbar.
+5. The SPL meter will continuously show the microphone level while the tone is playing.
+6. Adjust the relevant crossover/output gain until you hit the same SPL for each band.
+
+[Certain] If you want something more useful visually, open **RTA** instead of just SPL Meter. Click **RTA**, then hit the red/record button in the RTA window. The RTA continuously analyses the microphone while REW&#x27;s generator is running, and the current input RMS/SPL is displayed at the top of the RTA window. citeturn118188search11
+
+For what we&#x27;re doing, I&#x27;d actually use **SPL Meter for the coarse match** because it&#x27;s dead simple:
+
+&gt; Generator ON → SPL Meter ON → adjust gain → note dB SPL.
+
+Then RTA/sweeps afterward.
+
+One important setting: [Certain] use **Z weighting / unweighted SPL**, not A-weighting, otherwise your 150 Hz reading will be deliberately attenuated by the meter and won&#x27;t be comparable with 1 kHz/3 kHz.
+
+So if you see something like **SPL Z**, that&#x27;s the one I want for this job.</pre>
+</article>
+<article id="m21"><h2>Source message 21 · user</h2><small>2026-09-06T15:30:40.590000+00:00 · 31f4cdcc-0f18-408e-ba8f-6168d41e018e</small>
+<pre>then I have an issue with the SPL meter, as it doesn&#x27;t show anything, neither in RTA</pre>
+<figure><a href="images/21822cc5-3ae4-4675-98ff-3b5f5103eaac.png"><img loading="lazy" src="images/21822cc5-3ae4-4675-98ff-3b5f5103eaac.png" alt="Original attachment for source message 21"></a><figcaption>21822cc5-3ae4-4675-98ff-3b5f5103eaac.png</figcaption></figure>
+<figure><a href="images/d9da9e86-1031-427c-a6c5-d111e1f1c661.png"><img loading="lazy" src="images/d9da9e86-1031-427c-a6c5-d111e1f1c661.png" alt="Original attachment for source message 21"></a><figcaption>d9da9e86-1031-427c-a6c5-d111e1f1c661.png</figcaption></figure>
+</article>
+<article id="m24"><h2>Source message 24 · assistant</h2><small>2026-09-06T15:30:41.637249+00:00 · b3de7765-5a74-46c5-8116-70a75ae8df78</small>
+<pre>[Certain] I don’t think we have an input fault yet — **both screenshots show the SPL/RTA acquisition stopped.** Opening the window does not automatically start the microphone stream.
+
+[Certain] In the **SPL Meter**, click the **round red button at bottom-right**. In the **RTA**, click the **round red button at top-right**. Once running, you should immediately see ambient-room SPL and the RTA noise floor/spectrum, even with the generator off.
+
+Your current values:
+
+- `-120.0 dB SPL`
+- `-484.66 dBFS`
+- completely empty RTA
+
+are essentially REW&#x27;s **“no live samples”** state, not a plausible microphone reading.
+
+Do this first:
+
+1. **Generator OFF**
+2. Open SPL Meter.
+3. Click the **red button**.
+4. Clap or speak near the UMIK.
+5. You should see the meter jump immediately.
+6. Then open RTA and click **its red button**; speaking/clapping should create a visible spectrum.
+
+[Likely] If you click the red button and it **still stays at −120 dB**, then we do have an input-routing issue. And I already see the next suspect in your screenshot: REW currently says:
+
+&gt; **Default Input L on Default Device**
+
+rather than explicitly showing the UMIK.
+
+So if pressing Record doesn&#x27;t fix it, we&#x27;ll go straight into **REW Preferences → Soundcard / Input device** and explicitly select the UMIK rather than Linux&#x27;s “Default Device”.
+
+But first click that red button — I think this may be embarrassingly simple. 😄</pre>
+</article>
+<article id="m25"><h2>Source message 25 · user</h2><small>2026-09-06T15:33:31.983000+00:00 · c83ed26e-cb40-47dc-9f69-1ff1bfd18782</small>
+<pre>i did and doesn&#x27;t capture any noise. solved, the input was set to default rater than actual harware</pre>
+<figure><a href="images/1cb3877e-2cd9-4be0-bed2-dce09c3c25a3.png"><img loading="lazy" src="images/1cb3877e-2cd9-4be0-bed2-dce09c3c25a3.png" alt="Original attachment for source message 25"></a><figcaption>1cb3877e-2cd9-4be0-bed2-dce09c3c25a3.png</figcaption></figure>
+</article>
+<article id="m28"><h2>Source message 28 · assistant</h2><small>2026-09-06T15:33:34.280078+00:00 · 76d137a3-76f6-4cac-9ff9-3b778e20f1a9</small>
+<pre>[Certain] The remaining trap is that the meter is currently on **C-weighting**; for matching 150 Hz, 1 kHz and 3 kHz, switch it to **Z-weighting** so REW does not frequency-weight the readings.
+
+[Certain] Now that the actual UMIK hardware is selected, you’re ready. I’d do the coarse alignment exactly like this:
+
+- Generator: **Sine, −30 dBFS**
+- SPL Meter: **Z**, Slow is fine
+- One speaker only
+- One band active at a time
+- Master volume untouched once you start
+
+Start with the **12&quot; at 150 Hz**. Bring the system to something comfortable, say ~70–75 dB SPL, and note the reading.
+
+Then without touching master volume:
+
+**10&quot;: 1 kHz** → adjust its gain until it matches the 12&quot; SPL.
+
+**CD: 3 kHz** → adjust its gain until it matches too.
+
+[Certain] Don&#x27;t worry about whether the displayed SPL is perfectly calibrated in absolute terms. For this operation, **relative SPL consistency is what matters**. If the UMIK calibration file includes sensitivity, REW should also be close in absolute SPL anyway.
+
+Once you have the three numbers matched, send me the actual readings/gain positions. Then we move straight to the **three isolated sweeps**, which is where the interesting part starts.</pre>
+</article>
+<article id="m29"><h2>Source message 29 · user</h2><small>2026-09-06T15:42:22.742000+00:00 · fdbda5b4-8485-4118-ad4f-ba83a95c1179</small>
+<pre>done levelled#</pre>
+</article>
+<article id="m32"><h2>Source message 32 · assistant</h2><small>2026-09-06T15:42:23.295751+00:00 · 4488cbc9-dea3-4801-b39b-212b7dfecae3</small>
+<pre>[Certain] Don’t touch the gain controls again yet; the next job is to see whether the **band averages** actually line up, because the single-frequency match can still hide a 2–3 dB mismatch.
+
+[Certain] Do this on **one speaker only** first, same mic position and same master volume:
+
+- **12&quot; only** → REW sweep, 20 Hz–20 kHz
+- **10&quot; only** → same sweep
+- **CD only** → same sweep
+- then **all three together** → same sweep
+
+[Likely] Use about **−25 to −30 dBFS sweep level**. We only need roughly 70–80 dB SPL at the seat; there is no benefit in hammering the system.
+
+[Certain] Keep every measurement condition identical:
+- same speaker
+- same mic position
+- same master volume
+- same REW sweep level
+- no gain changes between sweeps
+
+Name them something obvious like:
+
+`L_12`  
+`L_10`  
+`L_CD`  
+`L_ALL`
+
+[Certain] For the first look, leave the traces essentially **unsmoothed** or use **1/12 octave** at most. We want to see the crossover behaviour and that 80–90 Hz SBIR hole clearly.
+
+[Likely] The useful passband comparison will be roughly:
+
+- 12&quot;: **120–220 Hz**
+- 10&quot;: **500–1500 Hz**
+- CD: **2.5–6 kHz**
+
+Ignore the immediate crossover regions for now.
+
+[Certain] Once you have those four traces, send me the REW graph. Then we can decide whether the tone-level match was good or whether one band needs a small correction **before** we touch time alignment or crossover phase.</pre>
+</article>
+<article id="m33"><h2>Source message 33 · user</h2><small>2026-09-06T15:45:50.402000+00:00 · 9308b95e-64bb-48b7-a776-9cba914cde94</small>
+<pre>got around 71 right now with -12dbs.
+
+will do the sweep with -12dbs.
+
+i&#x27;ll start with L&#x27;s then R&#x27;s and then all together</pre>
+</article>
+<article id="m36"><h2>Source message 36 · assistant</h2><small>2026-09-06T15:45:51.085382+00:00 · 0cf07751-4b7a-49ee-a55b-2c2f16731c79</small>
+<pre>[Likely] The only thing I’d change in your sequence is **don’t combine L+R until each speaker is understood on its own**; otherwise room interference between the two speakers can disguise what each stack is doing.
+
+[Certain] **−12 dBFS with ~71 dB SPL is perfectly usable** for these first sweeps. Keep that sweep level and the master volume fixed.
+
+I’d run them in this order:
+
+- **L12 only**
+- **L10 only**
+- **LCD only**
+- **L all 3 bands**
+
+Then:
+
+- **R12 only**
+- **R10 only**
+- **RCD only**
+- **R all 3 bands**
+
+Then, only after that:
+
+- **L+R all bands**
+
+[Certain] Do not alter any band gain between those measurements. Same mic position, same sweep level, same master volume.
+
+[Likely] For now, sweep **20 Hz–20 kHz**, even for individual bands. REW will simply show what the crossover is doing outside the intended passband, which is useful because we can see the actual slopes and summation.
+
+[Certain] When you send the graphs, the most useful first view is an overlay of:
+
+**L12 + L10 + LCD + L-all**
+
+and then the same four for R.
+
+[Likely] Use **1/12 octave smoothing** for the first visual assessment. If something suspicious appears around 300 Hz or 1.9 kHz, we can then look at that area unsmoothed.
+
+[Certain] At ~71 dB, don’t worry if the extreme LF trace below 30–40 Hz looks noisy; that is irrelevant to what we’re trying to establish right now.
+
+This next set of sweeps should tell us three things very quickly: **whether the acoustic gains are genuinely aligned, what the actual crossover slopes are doing, and whether the two crossover regions are summing or cancelling.**</pre>
+</article>
+<article id="m37"><h2>Source message 37 · user</h2><small>2026-09-06T16:01:22.230000+00:00 · 35626061-e2a0-47c3-a4a2-8f6cfa4cd287</small>
+<pre></pre>
+</article>
+<article id="m77"><h2>Source message 77 · tool</h2><small>2026-09-06T16:03:30.777580+00:00 · 697caf1c-263b-4bd7-b477-7e421dca6643</small>
+<pre>(8, [297, 36875, 73453])</pre>
+</article>
+<article id="m79"><h2>Source message 79 · tool</h2><small>2026-09-06T16:03:38.750123+00:00 · f5a1529e-5109-416f-9e7f-c1f6d30d1d28</small>
+<pre>[&#x27;/mnt/data/rew_thumbs/thumb_1.png&#x27;, &#x27;/mnt/data/rew_thumbs/thumb_2.png&#x27;, &#x27;/mnt/data/rew_thumbs/thumb_3.png&#x27;, &#x27;/mnt/data/rew_thumbs/thumb_4.png&#x27;, &#x27;/mnt/data/rew_thumbs/thumb_5.png&#x27;, &#x27;/mnt/data/rew_thumbs/thumb_6.png&#x27;, &#x27;/mnt/data/rew_thumbs/thumb_7.png&#x27;, &#x27;/mnt/data/rew_thumbs/thumb_8.png&#x27;]
+</pre>
+</article>
+<article id="m81"><h2>Source message 81 · tool</h2><small>2026-09-06T16:03:46.702674+00:00 · f00e597b-139a-4886-bf16-cf68e9918735</small>
+<pre>&#x27;/mnt/data/rew_thumbs/contact.png&#x27;</pre>
+</article>
+<article id="m94"><h2>Source message 94 · tool</h2><small>2026-09-06T16:05:29.578724+00:00 · 632546a5-769e-4d8b-be54-e4c188420580</small>
+<pre>parsed items 15 pos 0x359c8 next 0x7e0018
+0 &lt;class &#x27;str&#x27;&gt; None REW Measurement Data File V2
+1 &lt;class &#x27;tuple&#x27;&gt; None (&#x27;BLOCK&#x27;, b&#x27;\x00\x00\x00\x05\x00\x00\x00(&#x27;)
+2 &lt;class &#x27;str&#x27;&gt; None Notes:REW 06_09
+3 &lt;class &#x27;tuple&#x27;&gt; None (&#x27;BLOCK&#x27;, b&#x27;\x00\x00\x00\x08&#x27;)
+4 &lt;class &#x27;__main__.JObject&#x27;&gt; javax.swing.ImageIcon JObject(classdesc=ClassDesc(name=&#x27;javax.swing.ImageIcon&#x27;, suid=-9620227201090155
+5 &lt;class &#x27;str&#x27;&gt; None &lt;HTML&gt;&lt;style type=&quot;text/css&quot;&gt;body { margin-left: 3; }&lt;/style&gt;&lt;BODY&gt;Sep 6, 2026&lt;B
+6 &lt;class &#x27;__main__.JObject&#x27;&gt; javax.swing.ImageIcon JObject(classdesc=ClassDesc(name=&#x27;javax.swing.ImageIcon&#x27;, suid=-9620227201090155
+7 &lt;class &#x27;str&#x27;&gt; None &lt;HTML&gt;&lt;style type=&quot;text/css&quot;&gt;body { margin-left: 3; }&lt;/style&gt;&lt;BODY&gt;Sep 6, 2026&lt;B
+8 &lt;class &#x27;__main__.JObject&#x27;&gt; javax.swing.ImageIcon JObject(classdesc=ClassDesc(name=&#x27;javax.swing.ImageIcon&#x27;, suid=-9620227201090155
+9 &lt;class &#x27;str&#x27;&gt; None &lt;HTML&gt;&lt;style type=&quot;text/css&quot;&gt;body { margin-left: 3; }&lt;/style&gt;&lt;BODY&gt;Sep 6, 2026&lt;B
+10 &lt;class &#x27;__main__.JObject&#x27;&gt; javax.swing.ImageIcon JObject(classdesc=ClassDesc(name=&#x27;javax.swing.ImageIcon&#x27;, suid=-9620227201090155
+11 &lt;class &#x27;str&#x27;&gt; None &lt;HTML&gt;&lt;style type=&quot;text/css&quot;&gt;body { margin-left: 3; }&lt;/style&gt;&lt;BODY&gt;Sep 6, 2026&lt;B
+12 &lt;class &#x27;__main__.JObject&#x27;&gt; javax.swing.ImageIcon JObject(classdesc=ClassDesc(name=&#x27;javax.swing.ImageIcon&#x27;, suid=-9620227201090155
+13 &lt;class &#x27;str&#x27;&gt; None &lt;HTML&gt;&lt;style type=&quot;text/css&quot;&gt;body { margin-left: 3; }&lt;/style&gt;&lt;BODY&gt;Sep 6, 2026&lt;B
+14 &lt;class &#x27;__main__.JObject&#x27;&gt; javax.swing.ImageIcon JObject(classdesc=ClassDesc(name=&#x27;javax.swing.ImageIcon&#x27;, suid=-9620227201090155
+</pre>
+</article>
+<article id="m96"><h2>Source message 96 · tool</h2><small>2026-09-06T16:05:37.218642+00:00 · a24914d0-1554-4ce7-a8e1-45ac4545b04a</small>
+<pre>parsed items 37 pos 0x511d18 len 0x511d18 next 0x7e0399
+0 str None REW Measurement Data File V2
+1 tuple None (&#x27;BLOCK&#x27;, 8)
+2 str None Notes:REW 06_09
+3 tuple None (&#x27;BLOCK&#x27;, 4)
+4 JObject javax.swing.ImageIcon 
+5 str None &lt;HTML&gt;&lt;style type=&quot;text/css&quot;&gt;body { margin-left: 3; }&lt;/style&gt;&lt;BODY&gt;Sep 6, 2026&lt;BR&gt;5:49:12 PM&lt;BR&gt;20 t
+6 JObject javax.swing.ImageIcon 
+7 str None &lt;HTML&gt;&lt;style type=&quot;text/css&quot;&gt;body { margin-left: 3; }&lt;/style&gt;&lt;BODY&gt;Sep 6, 2026&lt;BR&gt;5:51:10 PM&lt;BR&gt;20 t
+8 JObject javax.swing.ImageIcon 
+9 str None &lt;HTML&gt;&lt;style type=&quot;text/css&quot;&gt;body { margin-left: 3; }&lt;/style&gt;&lt;BODY&gt;Sep 6, 2026&lt;BR&gt;5:51:53 PM&lt;BR&gt;20 t
+10 JObject javax.swing.ImageIcon 
+11 str None &lt;HTML&gt;&lt;style type=&quot;text/css&quot;&gt;body { margin-left: 3; }&lt;/style&gt;&lt;BODY&gt;Sep 6, 2026&lt;BR&gt;5:54:39 PM&lt;BR&gt;20 t
+12 JObject javax.swing.ImageIcon 
+13 str None &lt;HTML&gt;&lt;style type=&quot;text/css&quot;&gt;body { margin-left: 3; }&lt;/style&gt;&lt;BODY&gt;Sep 6, 2026&lt;BR&gt;5:56:21 PM&lt;BR&gt;20 t
+14 JObject javax.swing.ImageIcon 
+15 str None &lt;HTML&gt;&lt;style type=&quot;text/css&quot;&gt;body { margin-left: 3; }&lt;/style&gt;&lt;BODY&gt;Sep 6, 2026&lt;BR&gt;5:57:59 PM&lt;BR&gt;20 t
+16 JObject javax.swing.ImageIcon 
+17 str None &lt;HTML&gt;&lt;style type=&quot;text/css&quot;&gt;body { margin-left: 3; }&lt;/style&gt;&lt;BODY&gt;Sep 6, 2026&lt;BR&gt;5:59:07 PM&lt;BR&gt;20 t
+18 JObject javax.swing.ImageIcon 
+19 str None &lt;HTML&gt;&lt;style type=&quot;text/css&quot;&gt;body { margin-left: 3; }&lt;/style&gt;&lt;BODY&gt;Sep 6, 2026&lt;BR&gt;5:59:33 PM&lt;BR&gt;20 t
+20 tuple None (&#x27;BLOCK&#x27;, 4)
+21 JObject roomeqwizard.MeasData 
+22 tuple None (&#x27;BLOCK&#x27;, 4)
+23 JObject roomeqwizard.MeasData 
+24 tuple None (&#x27;BLOCK&#x27;, 4)
+25 JObject roomeqwizard.MeasData 
+26 tuple None (&#x27;BLOCK&#x27;, 4)
+27 JObject roomeqwizard.MeasData 
+28 tuple None (&#x27;BLOCK&#x27;, 4)
+29 JObject roomeqwizard.MeasData 
+</pre>
+</article>
+<article id="m98"><h2>Source message 98 · tool</h2><small>2026-09-06T16:05:40.433209+00:00 · 5d75f156-886b-4f55-bfab-6eb60c9e2bee</small>
+<pre>8</pre>
+</article>
+<article id="m100"><h2>Source message 100 · tool</h2><small>2026-09-06T16:05:48.532441+00:00 · 25c1a984-5ab5-4b97-987c-ce7543f19569</small>
+<pre>CLASS roomeqwizard.MeasData nfields 148
+alignSPLOffsetCumulative 0.0
+alignSPLOffsetLast 0.0
+asdOffset 0.0
+audioDataLength 0
+audioDataOffset 0
+calR 0.0
+dBcOffset 0.0
+dataLength 957
+endFreq 20037.845703125
+fdwEndFreq 20037.845703125
+fdwFrac 48.0
+fdwPPO 96
+fdwStartFreq 20.1416015625
+freqStep 0.3662109673023224
+hfFallSlope 0.5
+hfFallStart 1000
+hpApplied False
+impedanceCal 1.0
+inputR 0.0
+isFromRTA False
+isFsafFileMeasurement False
+isGroupPlaceHolder False
+isLogSpaced True
+lastUnwrapOffsetFreq 0.0
+leadsR 0.0
+lfRiseEnd 20
+lfRiseSlope 1.0
+lfRiseStart 200
+logStep 1.007246412223704
+logStepLog 0.007220283130832763
+numSweeps 1
+octaveFrac 24.0
+overlaySelected False
+phaseIsUnwrapped False
+ppo 96
+rawGDOctaveFrac 48.0
+refR 0.0
+roomHeight 2.38
+roomLength 5.0
+roomWidth 4.0
+sampleRate 48000
+sourceFileDate 1788709752279
+sourceType 5
+speakerBassMgmtShape 0
+speakerCutoff 80
+startFreq 20.1416015625
+useBars False
+validEndFreq 19750.56640625
+validStartFreq 20.434568405151367
+xOverHPCutoff 100
+xOverLPCutoff 1000
+addRoomCurve JObject java.lang.Boolean
+calDataLimitApplied JObject java.lang.Boolean
+ceaData None
+dBVInputOffset JObject java.lang.Double
+dBVOutputOffset JObject java.lang.Double
+distortionData JObject roomeqwizard.DistortionData
+eightc None
+eightcPosnsMeasured None
+eightcProfilePosnIDs None
+eightcProfileSt None
+eightcRoomID None
+eightcRoomName None
+enable JObject java.lang.Boolean
+eqConfig None
+eqName &#x27;Generic&#x27;
+fdwImag JArray [F len 957
+fdwPeakTime JObject java.lang.Double
+fdwReal JArray [F len 957
+filterSet JObject roomeqwizard.FilterSet
+filterSetWhenMeasured None
+gdValues JArray [F len 957
+groupColor None
+groupName None
+groupNotes None
+groupUuid None
+impedanceCalType None
+index3D None
+inputVolume None
+ir None
+irData JObject roomeqwizard.IRData
+jre &#x27;11.0.29 64-bit&#x27;
+label3D None
+locked JObject java.lang.Boolean
+measNotes &#x27;&#x27;
+meterCal JObject roomeqwizard.CalData
+micSensitivity JObject java.lang.Double
+noiseFilter list [&#x27;ENUM&#x27;, ClassDesc(name=&#x27;roomeqwizard.NoiseFilter&#x27;, suid=0, flags=18, fields=[],
+osName &#x27;linux&#x27;
+osVersion &#x27;6.1.0-52-amd64&#x27;
+outputName &#x27;Output device not selected, no output selected, L, volume: no control&#x27;
+outputVolume None
+peaks None
+phaseValues JArray [F len 957
+rawGDValues JArray [F len 957
+rawPhaseValues None
+rawSourceSet None
+rawUnwPhaseValues JArray [F len 957
+rawValues JArray [F len 957
+refResistancedB JObject java.lang.Double
+rewSubVersion JObject java.lang.Integer
+rewVersion JObject java.lang.Integer
+roomData None
+rtaDist None
+rtaLevelAdjustApplied None
+rtaOctaveFrac None
+savedColor JObject java.awt.Color
+scCal JObject roomeqwizard.CalData
+selectedOnOverlay JObject java.lang.Boolean
+shortDesc &#x27;L 12s&#x27;
+sigGenLevelSt &#x27;-12 dBFS&#x27;
+sourceCalOffsets None
+sourceFileFormat &#x27;256k Log Swept Sine, 1 sweep at -12.0 dBFS\nwith no timing reference&#x27;
+sourceFileName &#x27;U18dB [plughw:2,0], no input selected, L, volume: no control&#x27;
+sourceMax None
+sourceMaxdBFS None
+sourceMin None
+sourceMindBFS None
+sourceSet None
+sourceWeighting None
+sourcedBOffsets None
+speakerBassMgmtSlope None
+speakerBassMgmtXOverSlope list [&#x27;ENUM&#x27;, ClassDesc(name=&#x27;roomeqwizard.XOverSlope&#x27;, suid=0, flags=18, fields=[], 
+speakerLocn None
+splCalOffset JObject java.lang.Double
+splValues JArray [F len 957
+steppedSineResults None
+subLFCutoff JObject java.lang.Integer
+subLFSlope None
+subLFXOverSlope list [&#x27;ENUM&#x27;, ClassDesc(name=&#x27;roomeqwizard.XOverSlope&#x27;, suid=0, flags=18, fields=[], 
+sweep JObject roomeqwizard.MeasSweepFunction
+sweepLevel JObject java.lang.Double
+tails None
+targetLevel JObject java.lang.Double
+targetShape list [&#x27;ENUM&#x27;, ClassDesc(name=&#x27;roomeqwizard.TargetShape&#x27;, suid=0, flags=18, fields=[],
+timingRefInputName None
+timingRefName None
+timingReferenceMode list [&#x27;ENUM&#x27;, ClassDesc(name=&#x27;roomeqwizard.TimingReference&#x27;, suid=0, flags=18, fields
+ts None
+unit3D None
+unwPhaseRefPeak JArray [F len 957
+unwPhaseValues JArray [F len 957
+usesEmbeddedCalData JObject java.lang.Boolean
+uuid None
+uuid2 JObject roomeqwizard.UUID
+versionSt &#x27; beta 118&#x27;
+xOverHPChoice list [&#x27;ENUM&#x27;, ClassDesc(name=&#x27;roomeqwizard.XOverChoice&#x27;, suid=0, flags=18, fields=[],
+xOverLPChoice list [&#x27;ENUM&#x27;, ClassDesc(name=&#x27;roomeqwizard.XOverChoice&#x27;, suid=0, flags=18, fields=[],
+
+</pre>
+</article>
+<article id="m102"><h2>Source message 102 · tool</h2><small>2026-09-06T16:06:02.505325+00:00 · 51193131-2457-4313-bd7b-023cfbe2c743</small>
+<pre>0 L 12s 957 20.1416015625 20037.846286293614 44.8729362487793 85.36296081542969 [44.87293625 44.90830231 44.97608185 45.0942421  45.28497314]
+1 L10 957 20.1416015625 20037.846286293614 34.0108757019043 83.0685043334961 [39.18739319 38.66798401 37.91558456 37.08162689 36.37141037]
+2 L CD 957 20.1416015625 20037.846286293614 36.57719802856445 71.45114135742188 [41.38830566 41.21370316 40.96775055 40.69599152 40.44283295]
+3 R CD 957 20.1416015625 20037.846286293614 31.865495681762695 72.45602416992188 [44.23649979 44.10021591 43.87854385 43.5670166  43.16343689]
+4 R 10 957 20.1416015625 20037.846286293614 30.752880096435547 83.87532043457031 [42.91737366 42.34187698 41.4335022  40.22719193 38.76005554]
+5 R 12 957 20.1416015625 20037.846286293614 35.30640411376953 81.28511810302734 [48.90452957 49.08499146 49.31142044 49.51976776 49.66175842]
+6 L Stack 957 20.1416015625 20037.846286293614 44.94676971435547 84.26053619384766 [47.4946785  47.29512787 46.98840714 46.59616089 46.15075302]
+7 R stack 957 20.1416015625 20037.846286293614 44.74756622314453 84.40528106689453 [47.73001099 47.7407341  47.72692108 47.65188599 47.48573303]
+</pre>
+</article>
+<article id="m104"><h2>Source message 104 · tool</h2><small>2026-09-06T16:06:17.141758+00:00 · f833b8f5-f7f3-47bd-af73-4c77f380ad6b</small>
+<pre>L 12s 150 74.8119979456415 1k 62.95077797405092 3k 71.44504825018332
+(120, 220) 75.92228689647857 76.64169778901262
+(500, 1500) 62.446658761877764 64.5959463110418
+(2500, 6000) 69.66913106618834 70.1875904579386
+
+L10 150 54.298506879924595 1k 77.84409031787574 3k 65.4374174864487
+(120, 220) 55.742670831226164 57.38905907532845
+(500, 1500) 77.66936427668522 78.59105204753027
+(2500, 6000) 58.30093803090497 63.85020095416442
+
+L CD 150 42.98403856222913 1k 58.98967416185408 3k 68.5492783208006
+(120, 220) 43.086067426772345 43.33789134350559
+(500, 1500) 53.29092590432418 57.98968909378918
+(2500, 6000) 67.65167561050289 68.05195232537376
+
+R CD 150 40.02759456942675 1k 58.04180514297355 3k 66.09171157724202
+(120, 220) 41.16281395866757 41.645717528593465
+(500, 1500) 52.19637040088051 56.49542536486404
+(2500, 6000) 67.56009078222858 68.27239065566135
+
+R 10 150 55.7015542080707 1k 80.01061189663848 3k 70.7918384976286
+(120, 220) 59.10493955158052 61.201364577282874
+(500, 1500) 78.51094145523875 79.36279969336911
+(2500, 6000) 58.83674980983261 64.96398904444015
+
+R 12 150 71.3485482841115 1k 49.312024666538655 3k 38.690261744899495
+(120, 220) 75.93265106564476 76.6490799485251
+(500, 1500) 52.846979091041966 62.485944849572725
+(2500, 6000) 40.18324799971147 40.33601767060812
+
+</pre>
+</article>
+<article id="m106"><h2>Source message 106 · tool</h2><small>2026-09-06T16:06:35.215946+00:00 · 40da619a-9622-4698-aebf-38884e936d02</small>
+<pre>
+&lt;&lt;ImageDisplayed&gt;&gt;&#x27;/mnt/data/rew_individual.png&#x27;</pre>
+</article>
+<article id="m108"><h2>Source message 108 · tool</h2><small>2026-09-06T16:07:19.373324+00:00 · b440ce66-cb7a-49b3-a62a-3145beeebe68</small>
+<pre>saved
+</pre>
+</article>
+<article id="m113"><h2>Source message 113 · tool</h2><small>2026-09-06T16:07:51.583251+00:00 · fecb33f3-9c56-41fe-aa52-d4cda492e646</small>
+<pre>
+ L
+f    L 12s      L10     L CD  L Stack stack-max
+  100    78.15    57.97    58.43    76.76    -1.40
+  150    74.81    54.30    42.98    74.61    -0.20
+  200    77.77    59.48    44.14    78.29     0.52
+  250    76.60    65.31    40.56    76.45    -0.14
+  300    76.67    74.02    41.07    79.47     2.80
+  350    77.74    78.56    38.50    82.33     3.77
+  400    76.89    80.78    36.98    83.65     2.88
+  500    68.65    73.42    39.01    75.86     2.44
+  700    62.80    80.61    51.79    80.33    -0.28
+ 1000    62.95    77.84    58.99    76.25    -1.60
+ 1500    65.32    75.37    63.87    75.52     0.15
+ 1800    65.46    76.32    64.21    74.97    -1.35
+ 2000    66.91    77.11    64.59    75.85    -1.26
+ 2200    61.99    74.30    60.30    73.85    -0.45
+ 2500    65.72    68.98    63.39    69.77     0.78
+ 2800    65.08    69.22    64.23    68.58    -0.63
+ 3000    71.45    65.44    68.55    66.24    -5.20
+ 3200    69.64    68.00    67.72    66.30    -3.34
+ 3500    74.08    60.19    71.20    70.48    -3.61
+ 4000    69.67    57.15    67.84    67.73    -1.93
+ 5000    70.68    48.39    67.83    67.74    -2.93
+10000    74.31    40.52    71.43    71.36    -2.94
+
+ R
+f     R 12     R 10     R CD  R stack stack-max
+  100    78.80    58.57    58.58    79.44     0.65
+  150    71.35    55.70    40.03    70.30    -1.05
+  200    79.91    65.83    38.80    79.59    -0.32
+  250    76.77    69.39    43.34    75.82    -0.95
+  300    72.57    79.48    42.27    79.56     0.08
+  350    73.78    74.94    40.27    75.74     0.81
+  400    73.60    80.43    37.62    82.05     1.63
+  500    71.23    76.18    42.75    76.92     0.74
+  700    61.82    79.17    47.55    79.50     0.34
+ 1000    49.31    80.01    58.04    79.69    -0.32
+ 1500    36.64    76.05    62.45    75.13    -0.92
+ 1800    35.35    78.07    64.54    76.18    -1.89
+ 2000    37.10    75.59    62.64    73.71    -1.88
+ 2200    36.35    71.90    61.57    71.78    -0.11
+ 2500    37.19    71.47    63.37    70.69    -0.78
+ 2800    38.77    67.33    64.38    67.44     0.11
+ 3000    38.69    70.79    66.09    69.22    -1.57
+ 3200    39.83    67.28    66.55    67.12    -0.16
+ 3500    40.63    63.32    72.04    70.43    -1.61
+ 4000    41.20    59.20    66.45    66.98     0.52
+ 5000    40.98    48.05    68.78    68.91     0.14
+10000    37.71    37.60    70.63    70.96     0.33
+</pre>
+</article>
+<article id="m115"><h2>Source message 115 · tool</h2><small>2026-09-06T16:08:27.230371+00:00 · 4f2a6fa4-d305-4cd4-a56b-40474818d217</small>
+<pre>
+ L hi
+1500 A 75.4 B 63.9 C 75.5 -&gt; 93.9° cos -0.07
+1800 A 76.3 B 64.2 C 75.0 -&gt; 131.4° cos -0.66
+2000 A 77.1 B 64.6 C 75.8 -&gt; 130.5° cos -0.65
+2200 A 74.3 B 60.3 C 73.8 -&gt; 110.3° cos -0.35
+2500 A 69.0 B 63.4 C 69.8 -&gt; 94.3° cos -0.07
+2800 A 69.2 B 64.2 C 68.6 -&gt; 113.7° cos -0.40
+3000 A 65.4 B 68.5 C 66.2 -&gt; 130.1° cos -0.64
+3200 A 68.0 B 67.7 C 66.3 -&gt; 130.6° cos -0.65
+3500 A 60.2 B 71.2 C 70.5 -&gt; 114.5° cos -0.41
+4000 A 57.2 B 67.8 C 67.7 -&gt; 100.9° cos -0.19
+
+ R hi
+1500 A 76.1 B 62.4 C 75.1 -&gt; 124.3° cos -0.56
+1800 A 78.1 B 64.5 C 76.2 -&gt; 160.3° cos -0.94
+2000 A 75.6 B 62.6 C 73.7 -&gt; 153.1° cos -0.89
+2200 A 71.9 B 61.6 C 71.8 -&gt; 101.2° cos -0.19
+2500 A 71.5 B 63.4 C 70.7 -&gt; 113.9° cos -0.41
+2800 A 67.3 B 64.4 C 67.4 -&gt; 109.7° cos -0.34
+3000 A 70.8 B 66.1 C 69.2 -&gt; 123.5° cos -0.55
+3200 A 67.3 B 66.6 C 67.1 -&gt; 118.6° cos -0.48
+3500 A 63.3 B 72.0 C 70.4 -&gt; 127.3° cos -0.61
+4000 A 59.2 B 66.5 C 67.0 -&gt; 94.0° cos -0.07
+
+ R low
+250 A 76.8 B 69.4 C 75.8 -&gt; 116.4° cos -0.44
+300 A 72.6 B 79.5 C 79.6 -&gt; 101.8° cos -0.21
+350 A 73.8 B 74.9 C 75.7 -&gt; 108.7° cos -0.32
+400 A 73.6 B 80.4 C 82.1 -&gt; 74.3° cos 0.27
+500 A 71.2 B 76.2 C 76.9 -&gt; 96.8° cos -0.12
+4000 A 41.2 B 59.2 C 67.0 -&gt; nan° cos 19.77
+</pre>
+</article>
+<article id="m117"><h2>Source message 117 · tool</h2><small>2026-09-06T16:08:38.447785+00:00 · 8abcfdb2-909f-476a-9e42-705dad1f54ed</small>
+<pre>R 12 50-150 min,max ((np.float64(146.69641784003167), np.float64(70.99737633599175)), (np.float64(93.08261473824517), np.float64(81.12031639946831)))
+L 12s 50-150 min,max ((np.float64(55.34725386488904), np.float64(62.349771287706155)), (np.float64(73.87972027772044), np.float64(84.05432637532553)))
+L Stack 50-150 min,max ((np.float64(55.74832288184402), np.float64(64.28151830037434)), (np.float64(73.87972027772044), np.float64(83.5501725938585)))
+R stack 50-150 min,max ((np.float64(146.69641784003167), np.float64(69.65583038330078)), (np.float64(93.75712973549871), np.float64(81.40153418646918)))
+</pre>
+</article>
+<article id="m119"><h2>Source message 119 · tool</h2><small>2026-09-06T16:08:48.641840+00:00 · 4e0805dc-19aa-4108-bd3e-aa40a878772c</small>
+<pre>
+ L Stack
+50 78.5; 55 63.8; 60 68.9; 65 74.5; 70 81.0; 75 83.7; 80 75.8; 85 68.8; 90 75.3; 95 76.6; 100 76.8; 105 81.8; 110 81.9; 115 79.4; 120 80.4; 125 77.6; 130 75.1; 135 76.4; 140 76.4; 145 73.0; 150 74.6; 
+
+ R stack
+50 76.6; 55 74.9; 60 73.4; 65 73.0; 70 78.6; 75 78.4; 80 73.0; 85 78.1; 90 80.9; 95 81.6; 100 79.4; 105 78.8; 110 75.9; 115 77.9; 120 73.6; 125 74.7; 130 74.8; 135 73.9; 140 72.9; 145 69.1; 150 70.3; 
+
+ R 12
+50 76.5; 55 75.1; 60 73.7; 65 73.4; 70 78.8; 75 78.7; 80 73.4; 85 78.4; 90 80.9; 95 81.2; 100 78.8; 105 78.1; 110 75.4; 115 78.0; 120 74.1; 125 75.4; 130 75.5; 135 75.0; 140 74.0; 145 70.6; 150 71.3; 
+</pre>
+</article>
+<article id="m121"><h2>Source message 121 · tool</h2><small>2026-09-06T16:08:59.831812+00:00 · 09462617-2d80-4c2e-b734-99b363786a0d</small>
+<pre>
+ L Stack
+31.5 55.4 | 40 63.4 | 50 74.3 | 63 75.3 | 80 79.6 | 100 79.3 | 125 78.4 | 160 76.3 | 200 77.1 | 250 77.0 | 315 80.2 | 400 81.2 | 500 76.1 | 630 76.2 | 800 80.8 | 1000 78.2 | 1250 78.4 | 1600 74.7 | 2000 74.8 | 2500 70.7 | 3150 67.4 | 4000 68.2 | 5000 68.2 | 6300 68.8 | 8000 68.5 | 10000 70.1 | 12500 67.9 | 16000 65.3 | 
+
+ R stack
+31.5 56.8 | 40 65.7 | 50 73.7 | 63 74.7 | 80 78.0 | 100 79.8 | 125 75.3 | 160 77.4 | 200 78.1 | 250 77.8 | 315 77.0 | 400 80.9 | 500 75.2 | 630 75.2 | 800 81.7 | 1000 79.7 | 1250 78.6 | 1600 75.0 | 2000 74.3 | 2500 71.6 | 3150 69.1 | 4000 68.6 | 5000 68.9 | 6300 69.6 | 8000 69.4 | 10000 70.3 | 12500 68.5 | 16000 64.7 | 
+</pre>
+</article>
+<article id="m123"><h2>Source message 123 · tool</h2><small>2026-09-06T16:09:25.225507+00:00 · f91373fc-bc9a-4c3b-8db6-1a693f0c93a4</small>
+<pre>L 12s splCalOffset 126.056 sweepLevel -12.0 micSensitivity -2.056 targetLevel 75.0 savedColor {&#x27;falpha&#x27;: 0.0, &#x27;value&#x27;: -2749696, &#x27;cs&#x27;: None, &#x27;frgbvalue&#x27;: None, &#x27;fvalue&#x27;: None}
+L10 splCalOffset 126.056 sweepLevel -12.0 micSensitivity -2.056 targetLevel 75.0 savedColor {&#x27;falpha&#x27;: 0.0, &#x27;value&#x27;: -16747280, &#x27;cs&#x27;: None, &#x27;frgbvalue&#x27;: None, &#x27;fvalue&#x27;: None}
+L CD splCalOffset 126.056 sweepLevel -12.0 micSensitivity -2.056 targetLevel 75.0 savedColor {&#x27;falpha&#x27;: 0.0, &#x27;value&#x27;: -1669632, &#x27;cs&#x27;: None, &#x27;frgbvalue&#x27;: None, &#x27;fvalue&#x27;: None}
+R CD splCalOffset 126.056 sweepLevel -12.0 micSensitivity -2.056 targetLevel 75.0 savedColor {&#x27;falpha&#x27;: 0.0, &#x27;value&#x27;: -3366144, &#x27;cs&#x27;: None, &#x27;frgbvalue&#x27;: None, &#x27;fvalue&#x27;: None}
+R 10 splCalOffset 126.056 sweepLevel -12.0 micSensitivity -2.056 targetLevel 75.0 savedColor {&#x27;falpha&#x27;: 0.0, &#x27;value&#x27;: -16724842, &#x27;cs&#x27;: None, &#x27;frgbvalue&#x27;: None, &#x27;fvalue&#x27;: None}
+R 12 splCalOffset 126.056 sweepLevel -12.0 micSensitivity -2.056 targetLevel 75.0 savedColor {&#x27;falpha&#x27;: 0.0, &#x27;value&#x27;: -9869350, &#x27;cs&#x27;: None, &#x27;frgbvalue&#x27;: None, &#x27;fvalue&#x27;: None}
+L Stack splCalOffset 126.056 sweepLevel -12.0 micSensitivity -2.056 targetLevel 75.0 savedColor {&#x27;falpha&#x27;: 0.0, &#x27;value&#x27;: -2749696, &#x27;cs&#x27;: None, &#x27;frgbvalue&#x27;: None, &#x27;fvalue&#x27;: None}
+R stack splCalOffset 126.056 sweepLevel -12.0 micSensitivity -2.056 targetLevel 75.0 savedColor {&#x27;falpha&#x27;: 0.0, &#x27;value&#x27;: -14972885, &#x27;cs&#x27;: None, &#x27;frgbvalue&#x27;: None, &#x27;fvalue&#x27;: None}
+</pre>
+</article>
+<article id="m125"><h2>Source message 125 · tool</h2><small>2026-09-06T16:10:21.908930+00:00 · c813abd9-b2a4-4a1c-8295-e76f7eb2d263</small>
+<pre>L Stack 120-220 76.41513152349563 500-1500 77.35379324461285 2500-6000 67.93287047078786
+R stack 120-220 75.75523312886556 500-1500 77.92830176102488 2500-6000 68.6006648796649
+</pre>
+</article>
+<article id="m128"><h2>Source message 128 · assistant</h2><small>2026-09-06T16:10:22.967516+00:00 · 15757daf-cde4-4ddf-95ef-e5fb15affba8</small>
+<pre>[Certain] The uncomfortable result is that the **gain match is not actually matched in these sweeps**, and one of the eight measurements is contaminated.
+
+[Certain] I opened the `.mdat`. It contains: **L12, L10, L CD, R CD, R10, R12, L Stack, R Stack**.
+
+### First problem: redo `L 12s`
+
+[Certain] `L 12s` is **not an isolated 12-inch measurement**. Above about 1 kHz it continues at ~65–74 dB and tracks the CD response. At 10 kHz, for example, `L 12s` is about **74 dB**, while the correctly isolated `R 12` is only about **38 dB**.
+
+[Likely] The left CD was still active when you measured `L 12s`.
+
+So we cannot use that trace for left-side 12/10 crossover analysis.
+
+### Second problem: the CDs are much too low relative to the 10s
+
+[Certain] These are the actual numbers from the file:
+
+| Measurement | Your reference frequency | SPL there | Broad useful-band average |
+|---|---:|---:|---:|
+| L12 | 150 Hz | 74.8 dB | 75.9 dB, 120–220 Hz |
+| L10 | 1 kHz | 77.8 dB | 77.7 dB, 500–1500 Hz |
+| L CD | 3 kHz | 68.5 dB | 67.7 dB, 2.5–6 kHz |
+| R12 | 150 Hz | 71.3 dB | 75.9 dB, 120–220 Hz |
+| R10 | 1 kHz | 80.0 dB | 78.5 dB, 500–1500 Hz |
+| R CD | 3 kHz | 66.1 dB | 67.6 dB, 2.5–6 kHz |
+
+[Certain] The full-stack measurements confirm it even more clearly:
+
+- **Left:** LF 76.4 / mids 77.4 / HF 67.9 dB
+- **Right:** LF 75.8 / mids 77.9 / HF 68.6 dB
+
+[Certain] So from roughly 500–1500 Hz to 2.5–6 kHz you have about **9–10 dB of drop**.
+
+That is enormous.
+
+[Likely] This explains a lot of the character you described earlier: **forward guitar/midrange, reduced snare definition and a somewhat hollow voice presentation**. The 10s are dominating the acoustic balance.
+
+### And there is crossover cancellation as well
+
+[Certain] At the high crossover the combined stack is sometimes **quieter than either contributing driver alone**, which can only happen through destructive interference.
+
+At 3 kHz on the left:
+
+- L10 = **65.4**
+- LCD = **68.5**
+- L Stack = **66.2**
+
+[Certain] Adding the 10 actually takes the CD down by about **2.3 dB**.
+
+On the right at 3 kHz:
+
+- R10 = **70.8**
+- RCD = **66.1**
+- R Stack = **69.2**
+
+[Certain] Again the combination is about **1.6 dB below the 10 alone**.
+
+[Likely] So yes, your suspicion that TA/crossover interaction was contributing to the strange mid/HF presentation was justified. There is genuine partial cancellation around the 10/CD overlap.
+
+[Certain] But we cannot derive a trustworthy delay in milliseconds from these measurements because REW saved them as:
+
+&gt; `with no timing reference`
+
+So **don&#x27;t start moving delays from the phase traces yet**.
+
+### The 12/10 crossover looks much healthier
+
+[Likely] On the right, which has a valid isolated R12 trace, the 300–500 Hz region isn&#x27;t catastrophically wrong.
+
+Around 400 Hz:
+
+- R12 ≈ 73.6
+- R10 ≈ 80.4
+- complete stack ≈ 82.1
+
+[Certain] There is positive summation there, although it isn&#x27;t perfect. I&#x27;d leave the low crossover alone until we&#x27;ve fixed the much larger 10/CD level problem.
+
+### Interesting result on your 80–90 Hz dip
+
+[Certain] This current measurement does **not** show a clean identical 80–90 Hz null in both speakers.
+
+The left has a strong local notch: approximately **84 dB at 75 Hz → 69 dB around 85 Hz**.
+
+The right is different: approximately **73 dB at 80 Hz → 81 dB around 90 Hz**.
+
+[Likely] That does not disprove the front-wall SBIR mechanism you&#x27;ve already demonstrated by moving the cabinets, but it shows that **room modes and left/right geometry are strongly overlaying it**. I would not design a giant bass trap from the old “80–90 Hz null” assumption based on this new data.
+
+---
+
+### What I would do now
+
+[Certain] **Do not change cabinet position or crossover frequency yet.**
+
+[Likely] I would make a first gain correction of approximately:
+
+- **10s: −1 to −2 dB**
+- **CDs: +5 to +6 dB**
+
+[Likely] I would **not** raise the CDs the full measured 9–10 dB initially. A few dB of downward room-response tilt is perfectly sensible for your system and listening position; starting with +5–6 dB will put the HF much closer without making the horns scream at us.
+
+[Certain] Then redo:
+
+`L12 / L10 / LCD / L stack`  
+`R12 / R10 / RCD / R stack`
+
+and make bloody sure the CD is off for `L12`. 😁
+
+[Certain] For that next set, we should also enable **REW acoustic timing reference**. Then the same measurements will let us attack the **10/CD physical offset and polarity/phase properly**, rather than guessing from amplitude alone.
+
+And that, looking at this file, is where I think the real improvement is going to come from: **first fix that ~6 dB HF deficit, then time-align the 10/CD crossover.**</pre>
+</article>
+<article id="m129"><h2>Source message 129 · user</h2><small>2026-09-06T16:12:30.237000+00:00 · 2e55ba21-ff84-4c8b-98b5-070f6dfcddfd</small>
+<pre>YES. I TOOK THE l12 AGAIN AS IT WAS CONTAMINATED BY THE cd 
+
+HERE IS THE 2 STACKS SWEEPS </pre>
+<figure><a href="images/176918ab-57c9-433c-a93b-488658b20500.png"><img loading="lazy" src="images/176918ab-57c9-433c-a93b-488658b20500.png" alt="Original attachment for source message 129"></a><figcaption>176918ab-57c9-433c-a93b-488658b20500.png</figcaption></figure>
+</article>
+<article id="m133"><h2>Source message 133 · assistant</h2><small>2026-09-06T16:12:31.200589+00:00 · 84a2a238-d289-417d-8da4-bbfb6d76f598</small>
+<pre>[Likely] The stacks tell us this is **not mainly a time-alignment problem**; the dominant issue is a broad HF level shelf, not a narrow crossover cancellation.
+
+[Certain] From roughly **100 Hz to 800–900 Hz**, both stacks sit around **77–82 dB** most of the time. Then from about **1 kHz to 3 kHz** they fall progressively to roughly **68–70 dB**, and from 3 kHz upward they stay around that level.
+
+That shape matters. A serious 10/CD phase problem around 1.9 kHz would usually show a more localized crater or sharp disturbance around the crossover. What you have is much broader:
+
+&gt; ~80 dB around 800 Hz  
+&gt; ~77–78 dB around 1 kHz  
+&gt; ~74–75 dB around 1.5–2 kHz  
+&gt; ~69–70 dB around 3 kHz  
+&gt; then roughly stable to 10 kHz
+
+[Likely] That looks much more like **the CD band simply being too low acoustically**.
+
+I disagree because chasing TA now would be trying to repair a level imbalance with phase. Here&#x27;s what I&#x27;d do instead: **raise the CD first by about +4 dB and rerun only L Stack and R Stack.** The risk in adjusting delay first is that we could optimize the wrong operating point and have to redo it after changing CD gain anyway.
+
+I would **not add the full 8–10 dB** that the raw band averages suggest. [Likely] Your room response should retain some downward tilt; making 100 Hz–10 kHz ruler-flat at the listening chair would probably sound too bright.
+
+So my first experiment would be:
+
+**CD +4 dB**  
+10s unchanged  
+12s unchanged  
+same master volume  
+same mic position  
+same −12 dBFS sweep
+
+Then overlay the new stack traces against these.
+
+---
+
+[Certain] The other very useful result here is the **L/R matching**.
+
+Above roughly **90–100 Hz**, red and green are remarkably close. There are lots of small wiggles, but the two channels track each other extremely well through most of the midrange and HF.
+
+That strongly suggests:
+
+- amplifier/channel gain is now reasonably matched,
+- crossover component tolerances aren&#x27;t creating major L/R differences,
+- driver-to-driver consistency is good,
+- microphone positioning relative to the two stacks is sensible.
+
+Below ~90 Hz, however, L/R diverge substantially.
+
+[Certain] Look around **40–80 Hz**: one channel has a big dip where the other doesn&#x27;t, and then they effectively swap behaviour elsewhere.
+
+That is classic **room/boundary interaction**, not amplifier gain.
+
+So I would keep the bass gain exactly where it is for now.
+
+---
+
+[Likely] The low crossover also doesn&#x27;t worry me much from this graph. Around the 12/10 transition there are peaks/dips, but there is no obvious catastrophic crossover null. We&#x27;ll inspect that properly from the isolated measurements after the contaminated L12 has been replaced.
+
+The high crossover is more interesting, but again the stack response says:
+
+**level first → TA second.**
+
+And the really encouraging part is that the two complete speakers are behaving almost identically. That makes the next stage much easier because we&#x27;re tuning **one acoustic design replicated twice**, rather than debugging two different speakers.
+
+So: **+4 dB CD, two stack sweeps only.** Show me that overlay before changing anything else.</pre>
+</article>
+<article id="m134"><h2>Source message 134 · user</h2><small>2026-09-06T16:17:31.184000+00:00 · 52595736-939b-4fb9-9231-9a091e97155e</small>
+<pre>ok, so i give a bit of gain to the CD&#x27;s </pre>
+<figure><a href="images/8ce2fac1-5574-4f28-b864-e2ab0076ca30.png"><img loading="lazy" src="images/8ce2fac1-5574-4f28-b864-e2ab0076ca30.png" alt="Original attachment for source message 134"></a><figcaption>8ce2fac1-5574-4f28-b864-e2ab0076ca30.png</figcaption></figure>
+</article>
+<article id="m137"><h2>Source message 137 · assistant</h2><small>2026-09-06T16:17:32.270155+00:00 · 24b96bbe-f075-497e-a182-2dc1fb3f614f</small>
+<pre>[Likely] I wouldn’t add any more CD gain yet — this new isolated-CD trace says you’re now **very close**, and another broad gain increase could make 4–10 kHz too hot.
+
+[Certain] Look at what changed:
+
+- ~2 kHz: **71–73 dB**
+- 3 kHz: **~75 dB**
+- 4–10 kHz: mostly **77–80 dB**
+- L/R tracking is excellent, generally within ~1 dB
+
+Your 10&quot; useful midband was around **78 dB**, so the CD is no longer sitting 9–10 dB underneath it. Above ~3.5 kHz it is essentially at the same acoustic level already.
+
+The apparent weakness around **2 kHz** is expected because you&#x27;re looking right at the CD&#x27;s high-pass/crossover region. The 10&quot; should be contributing there too. We need to judge **their sum**, not force the CD-alone trace to equal 78 dB at 2 kHz.
+
+Here&#x27;s what I&#x27;d do instead: **leave the CD gain exactly where it is and immediately take L Stack and R Stack again.** The risk in adding another 2–3 dB now is that you solve the crossover visually while ending up with a 3–10 kHz shelf above the mids.
+
+[Likely] What I want to see in the new stack is something approximately like:
+
+&gt; 500 Hz–1.5 kHz ≈ 77–80 dB  
+&gt; 2–3 kHz ≈ similar, without a hole  
+&gt; then a gentle decline rather than a cliff
+
+If the stack still drops significantly through 1.5–3 kHz, **then we investigate crossover summation/TA rather than blindly adding CD level**.
+
+And this graph gives us another useful result: [Certain] the two CDs are extremely well level-matched now. So **do not adjust L and R independently** anymore unless a subsequent measurement gives us a reason.</pre>
+</article>
+<article id="m138"><h2>Source message 138 · user</h2><small>2026-09-06T16:20:36.473000+00:00 · be440a25-914f-4925-8658-2bd3e1f94315</small>
+<pre>full L and R stack take 2</pre>
+<figure><a href="images/e1364c7b-03c3-4f98-80d3-be2c0e83c546.png"><img loading="lazy" src="images/e1364c7b-03c3-4f98-80d3-be2c0e83c546.png" alt="Original attachment for source message 138"></a><figcaption>e1364c7b-03c3-4f98-80d3-be2c0e83c546.png</figcaption></figure>
+</article>
+<article id="m141"><h2>Source message 141 · assistant</h2><small>2026-09-06T16:20:37.675311+00:00 · ff3bb821-b4b4-4e64-aabe-cc42b0c05242</small>
+<pre>[Likely] Don’t touch the gains again now — **this is the first trace where the overall balance is genuinely in the right ballpark.**
+
+[Certain] Compared with the previous stack sweep, the HF deficit is gone. From roughly **100 Hz to 10 kHz**, both channels now live mostly in the **mid/high-70s dB**, with normal room/driver ripple rather than a broad 8–10 dB tonal step.
+
+[Certain] The L/R agreement is also very good. Above roughly 100 Hz, the two traces track each other closely enough that I would **not make separate left/right gain adjustments**.
+
+[Likely] What remains is now much more interesting: there is still a **broad shallow depression through roughly 1.5–3 kHz**, centered close to your 10&quot;/CD crossover region. It is not a catastrophic null, but it is exactly where I would expect residual phase/time-offset interaction to show up.
+
+You can see the general shape:
+
+- ~700–900 Hz: around 80–82 dB
+- ~1.5 kHz: around 76–78 dB
+- ~2–2.5 kHz: around 74–76 dB
+- ~3 kHz onward: recovers toward 76–80 dB
+
+[Likely] That is now **too localized to solve with another CD gain change**. More CD gain would simply raise 3–10 kHz while probably leaving the crossover trough only partly improved.
+
+So the next step is:
+
+**freeze gains exactly where they are.**
+
+Then we move to **10/CD time alignment**.
+
+[Certain] For that, we need new measurements with an **acoustic timing reference enabled**. Without timing reference, REW phase cannot tell us the actual relative arrival time reliably.
+
+I’d take only these four first:
+
+- L10
+- LCD
+- R10
+- RCD
+
+with acoustic timing reference active, same mic position, same master volume, same sweep level.
+
+[Likely] Then we can use REW’s **Alignment Tool** around the ~1.9 kHz crossover and determine whether the horn needs delay, the 10 needs delay, or whether polarity/slope is the larger issue.
+
+[Certain] The bass below ~100 Hz is still a separate room problem. Don’t let that distract us yet; the mid/HF stack is now coherent enough that we can finally tune the crossover properly.
+
+This current response is already **vastly more sensible electrically/acoustically than the first stack sweep**. Now we stop doing gain and start doing phase.</pre>
+</article>
+<article id="m142"><h2>Source message 142 · user</h2><small>2026-09-06T16:24:34.203000+00:00 · 3aea73e7-989c-43b9-8720-d84ad5f5a228</small>
+<pre>L CD + L10 and R CD+10</pre>
+<figure><a href="images/340b7db8-e1d4-49cd-b6e2-c7c09dd79085.png"><img loading="lazy" src="images/340b7db8-e1d4-49cd-b6e2-c7c09dd79085.png" alt="Original attachment for source message 142"></a><figcaption>340b7db8-e1d4-49cd-b6e2-c7c09dd79085.png</figcaption></figure>
+<figure><a href="images/9d311494-2ecf-4e1d-b58c-1e8a435c397a.png"><img loading="lazy" src="images/9d311494-2ecf-4e1d-b58c-1e8a435c397a.png" alt="Original attachment for source message 142"></a><figcaption>9d311494-2ecf-4e1d-b58c-1e8a435c397a.png</figcaption></figure>
+</article>
+<article id="m145"><h2>Source message 145 · assistant</h2><small>2026-09-06T16:24:35.400004+00:00 · f6d9b967-e0d1-4b71-ba25-008bb2d56ab2</small>
+<pre>[Certain] These isolated traces are the key: **the 10 and CD levels are now well matched through the actual overlap region.** So I would stop changing gain.
+
+[Likely] The acoustic crossover is not exactly the nominal 1.9 kHz. On both channels, the two traces are roughly equal around **~2.0–2.3 kHz**, which is perfectly plausible once the driver responses and electrical slopes are included.
+
+[Certain] Around that region, each driver is roughly **72–74 dB**. If they were arriving substantially in phase, the combined 10+CD response should rise toward roughly **77–79 dB**. Your complete-stack measurements were instead sitting around the mid-70s there.
+
+So we now have a much cleaner diagnosis:
+
+**magnitude = basically right**  
+**summation = not right**
+
+[Likely] That means the remaining 1.5–3 kHz depression is primarily an **acoustic phase relationship problem between the 10 and horn**, not a level problem.
+
+There is also very good symmetry:
+
+- Left 10/CD intersection: broadly ~2 kHz
+- Right 10/CD intersection: broadly ~2 kHz
+- Shapes are very similar between channels
+
+[Certain] That makes it unlikely that we have a bad driver or amplifier channel. We are looking at the geometry/crossover itself.
+
+### Before we start moving anything
+
+[Certain] I would do one extremely useful test first, because it costs about two minutes:
+
+Measure **10 + CD together only**, with the 12 muted.
+
+For each side:
+
+1. `L 10+CD normal polarity`
+2. `L 10+CD CD polarity reversed`
+3. `R 10+CD normal polarity`
+4. `R 10+CD CD polarity reversed`
+
+Same gains, same mic, same everything.
+
+[Likely] If reversing the CD suddenly fills the ~1.8–2.5 kHz region, we immediately know the present electrical/acoustic polarity relationship is wrong for the current slopes.
+
+If normal polarity is better but still gives weak summation, then we have predominantly **time/physical offset** to deal with.
+
+And because your crossover is analogue, that distinction matters: we aren&#x27;t going to casually type `0.37 ms` into a DSP. We need to know whether the fix is **polarity, crossover slope, or physical fore/aft geometry**.
+
+[Likely] Looking at these two graphs, I suspect the latter two more than a raw level issue.
+
+So: **freeze all gain. Do the four 10+CD summed measurements, normal and reversed.** That&#x27;s now the fastest diagnostic.</pre>
+</article>
+<article id="m146"><h2>Source message 146 · user</h2><small>2026-09-06T16:26:53.626000+00:00 · 1985b445-1259-472f-8cf3-863fb05f8752</small>
+<pre>here are again the L/R stack . these are on 1/12 smoothing</pre>
+<figure><a href="images/a5c182ab-8fde-4370-b5c0-9ba1e1438d1b.png"><img loading="lazy" src="images/a5c182ab-8fde-4370-b5c0-9ba1e1438d1b.png" alt="Original attachment for source message 146"></a><figcaption>a5c182ab-8fde-4370-b5c0-9ba1e1438d1b.png</figcaption></figure>
+</article>
+<article id="m149"><h2>Source message 149 · assistant</h2><small>2026-09-06T16:26:55.030873+00:00 · 5f7bcbd7-2914-437b-9ba6-18e49b2dc002</small>
+<pre>[Likely] Don’t over-read the smoothness here: **1/12 octave is already hiding some of the crossover detail we now care about.**
+
+[Certain] The good news is that the **L and R stacks are extremely well matched** from roughly 200 Hz upward. The two traces are basically riding on top of each other. So I would now freeze all gains.
+
+[Likely] There is still a broad sag through roughly **1.5–3 kHz**, but it’s only around 3–5 dB now, not the huge HF level problem we had before. At this point, that looks much more like **imperfect 10/CD summation** than a raw gain issue.
+
+The next useful measurement is not another full-stack sweep. Do this on one side first:
+
+- `L10`
+- `LCD`
+- `L10+CD normal polarity`
+- `L10+CD with CD polarity reversed`
+
+Use **no smoothing or 1/48 octave**, and zoom the graph to about **1–4 kHz**.
+
+[Certain] That polarity test is extremely diagnostic. If the reversed-polarity trace produces a **deep notch around the crossover**, while normal polarity fills in, then the drivers are already close to good acoustic alignment. If neither polarity gives strong constructive/destructive separation, then the acoustic offset is still significant.
+
+[Likely] From the graph you just posted, I expect **normal polarity is partially summing but not optimally**. Around 2 kHz the stack is only a little above the individual-driver levels you showed before; if phase were very well aligned, we should see a stronger rise where the 10 and CD have similar amplitude.
+
+So now I’d stop looking at the whole 20 Hz–20 kHz picture and **zoom brutally into the 10/CD handoff**. That’s where the remaining tuning work is.</pre>
+</article>
+<article id="m150"><h2>Source message 150 · user</h2><small>2026-09-06T16:39:26.137000+00:00 · 4816d1a8-81ca-4b62-8906-c2bf6ab321c6</small>
+<pre></pre>
+<figure><a href="images/df68cbd2-27d3-428b-baef-f27b7b605cca.png"><img loading="lazy" src="images/df68cbd2-27d3-428b-baef-f27b7b605cca.png" alt="Original attachment for source message 150"></a><figcaption>df68cbd2-27d3-428b-baef-f27b7b605cca.png</figcaption></figure>
+<figure><a href="images/de25f32f-823d-4c25-9fca-7fe870b1c921.png"><img loading="lazy" src="images/de25f32f-823d-4c25-9fca-7fe870b1c921.png" alt="Original attachment for source message 150"></a><figcaption>de25f32f-823d-4c25-9fca-7fe870b1c921.png</figcaption></figure>
+<figure><a href="images/5404710d-8262-4dd4-97f7-b5a4576f0cec.png"><img loading="lazy" src="images/5404710d-8262-4dd4-97f7-b5a4576f0cec.png" alt="Original attachment for source message 150"></a><figcaption>5404710d-8262-4dd4-97f7-b5a4576f0cec.png</figcaption></figure>
+</article>
+<article id="m152"><h2>Source message 152 · tool</h2><small>2026-09-06T16:39:37.252843+00:00 · 5f4b2cc1-4c4b-4ab3-9c79-342a8e3a2657</small>
+<pre>/mnt/data/df68cbd2-27d3-428b-baef-f27b7b605cca.png (1660, 1000)
+/mnt/data/de25f32f-823d-4c25-9fca-7fe870b1c921.png (1660, 1000)
+/mnt/data/5404710d-8262-4dd4-97f7-b5a4576f0cec.png (1660, 1000)
+</pre>
+</article>
+<article id="m158"><h2>Source message 158 · assistant</h2><small>2026-09-06T16:40:07.305536+00:00 · 6560ceb2-e474-4f44-834a-2d45d8484659</small>
+<pre>[Certain] The polarity test just gave the cleanest answer so far: **with your present crossover slopes and geometry, the CD wants reversed polarity.**
+
+[Certain] Look specifically around the actual 10/CD overlap:
+
+- Around **2 kHz**, 10 alone is roughly **75–76 dB**
+- CD alone is roughly **72–73 dB**
+- Normal-polarity sum is only about **75–76 dB**
+- Reversed-polarity sum jumps to roughly **80 dB**
+
+That is almost textbook constructive summation.
+
+[Certain] If 76 dB and 73 dB sources were perfectly in phase, the theoretical summed level is about **80.6 dB**. Your reversed-polarity trace is essentially there. So this is much stronger evidence than simply saying “the curve looks flatter.”
+
+The normal-polarity trace is doing exactly what we suspected: partial cancellation through roughly **1.4–3 kHz**.
+
+So I would now:
+
+1. **Leave the CDs electrically reversed.**
+2. Do the same normal/reversed test on the **right** side just to confirm symmetry.
+3. If right behaves the same, leave both CDs reversed permanently for this crossover configuration.
+4. Take new **full L stack / full R stack** sweeps.
+
+[Likely] I would **not touch physical time alignment yet**. The reversed-polarity response is already summing remarkably close to the mathematical maximum around crossover. That means there may be very little left to gain from fore/aft adjustment.
+
+And this also explains the broad 1.5–3 kHz sag we were chasing: it wasn&#x27;t primarily insufficient CD gain. It was **the electrical/acoustic phase relationship at the crossover**.
+
+[Certain] One caveat: polarity isn&#x27;t intrinsically “correct” or “incorrect” for the driver. It is correct **for this combination of crossover slope, acoustic centers and crossover frequency**. If you later change slopes or crossover frequency substantially, we retest it.
+
+This is a very useful result. The next full-stack sweep with the CDs reversed should look materially better through the presence region.</pre>
+</article>
+<article id="m159"><h2>Source message 159 · user</h2><small>2026-09-06T16:46:00.173000+00:00 · 326dcdfe-cb3f-402c-a513-816622eede59</small>
+<pre></pre>
+<figure><a href="images/666e9581-dd23-4b67-8307-2d538955d106.png"><img loading="lazy" src="images/666e9581-dd23-4b67-8307-2d538955d106.png" alt="Original attachment for source message 159"></a><figcaption>666e9581-dd23-4b67-8307-2d538955d106.png</figcaption></figure>
+</article>
+<article id="m162"><h2>Source message 162 · assistant</h2><small>2026-09-06T16:46:01.072340+00:00 · a133a01d-853c-4eb4-96aa-36be172a330f</small>
+<pre>[Certain] The missing piece is no longer polarity — the **right channel confirms exactly the same behaviour as the left**.
+
+[Certain] With the CD reversed, the R 10+CD sum gains roughly **3–5 dB through the critical ~1.6–3 kHz region**, while above ~3.5–4 kHz the two traces converge again. That is exactly what we want to see: the change is concentrated where the two drivers overlap.
+
+At your cursor, around **2.59 kHz**:
+
+- normal polarity: **75.1 dB**
+- reversed polarity: **78.3 dB**
+
+So roughly **+3.2 dB** just from changing polarity, with no gain change.
+
+[Likely] Around ~2 kHz the improvement looks even larger. Together with the isolated 10/CD traces, this is strong evidence that **reversed CD polarity is the correct configuration for the present crossover, driver geometry and slopes**.
+
+So I would now do this:
+
+- leave **both CDs reversed**
+- leave **all gains exactly where they are**
+- change **nothing physical**
+- take fresh **L full stack** and **R full stack** sweeps
+
+[Likely] I would not touch time alignment yet. The polarity inversion has already fixed a large portion of what looked like a TA problem. We should first see what the complete 3-way system looks like with the correct 10/CD summation.
+
+If the new full-stack curves show that **1.5–3 kHz is now filled in**, then we may discover that physical TA is already close enough that only fine optimisation remains.
+
+This test was decisive: **CDs reversed from here onward.**</pre>
+</article>
+<article id="m163"><h2>Source message 163 · user</h2><small>2026-09-06T16:50:37.044000+00:00 · 506895b8-dbda-43f1-89bd-f2306d532c75</small>
+<pre>10 suffer from a big deep at 500 and the 12 at 50</pre>
+<figure><a href="images/25035431-fb33-4c6f-8121-699da3559120.png"><img loading="lazy" src="images/25035431-fb33-4c6f-8121-699da3559120.png" alt="Original attachment for source message 163"></a><figcaption>25035431-fb33-4c6f-8121-699da3559120.png</figcaption></figure>
+<figure><a href="images/f050a8e0-88ae-42f4-96ac-7f908d3d3ff1.png"><img loading="lazy" src="images/f050a8e0-88ae-42f4-96ac-7f908d3d3ff1.png" alt="Original attachment for source message 163"></a><figcaption>f050a8e0-88ae-42f4-96ac-7f908d3d3ff1.png</figcaption></figure>
+<figure><a href="images/fa0f7035-cde5-40c3-b078-5460b19c91c9.png"><img loading="lazy" src="images/fa0f7035-cde5-40c3-b078-5460b19c91c9.png" alt="Original attachment for source message 163"></a><figcaption>fa0f7035-cde5-40c3-b078-5460b19c91c9.png</figcaption></figure>
+</article>
+<article id="m166"><h2>Source message 166 · assistant</h2><small>2026-09-06T16:50:38.298600+00:00 · 936cc9ae-1424-422c-9030-9266c992abf4</small>
+<pre>[Likely] I’d resist calling the 500 Hz feature a “10-inch problem” yet; **the fact that both 10s show essentially the same depression makes a common acoustic cancellation more likely than a driver or amplifier fault.**
+
+[Certain] On the 10-only traces, there is a broad loss centred roughly around **500–600 Hz**, with both channels following the same general shape. Because the 12 and CD are muted in those measurements, this is **not crossover cancellation between drivers**.
+
+[Likely] The main suspects are therefore:
+
+- floor/nearby-boundary reflection,
+- cabinet/baffle interaction,
+- or another common room reflection path.
+
+[Certain] Do **not** try to fill that with gain. A cancellation notch cannot be repaired sensibly by turning the 10 up; you mostly increase everything around it.
+
+The quickest diagnostic is a **near-field 10 measurement**: put the UMIK roughly **20–30 cm from the cone**, on axis, and sweep just the 10. If the 500–600 Hz depression largely disappears, we have proved it is room/geometry rather than the driver/cabinet itself.
+
+---
+
+[Likely] The ~50 Hz problem on the 12s is even more obviously boundary/room dominated, especially because L and R behave differently down there.
+
+And this is important relative to our earlier SBIR discussion: [Certain] with the cone about **1.2 m from the front wall**, the simple quarter-wave front-wall SBIR estimate is nearer:
+
+\[
+f=\frac{343}{4\times1.2}\approx71\,Hz
+\]
+
+So a strong feature around **50–60 Hz is unlikely to be explained by that front-wall distance alone**.
+
+[Likely] That means the current LF curve is probably a combination of:
+
+**front-wall SBIR + room modes + side/floor boundaries**, rather than one clean SBIR notch.
+
+That also explains why the two channels diverge so much below ~100 Hz while becoming remarkably similar above it.
+
+---
+
+[Certain] The encouraging part is the full-stack result with the CDs reversed: from roughly **100 Hz through 15 kHz the system is now surprisingly coherent**, especially considering this is an untreated listening-position measurement. The former 1.5–3 kHz hole has largely disappeared.
+
+So I would separate the remaining jobs:
+
+**10/CD crossover:** essentially sorted at the coarse level.  
+**500 Hz 10&quot; depression:** identify reflection/cabinet mechanism.  
+**&lt;100 Hz:** treat as a separate room/SBIR investigation.
+
+[Likely] I’d do the **10 near-field test next**, because it will take five minutes and immediately tell us whether that 500 Hz dip belongs to the speaker or the room. After that, we can attack the LF without mixing two completely different problems.</pre>
+</article>
+<article id="m167"><h2>Source message 167 · user</h2><small>2026-09-06T16:56:30.068000+00:00 · 0ab9f43e-2779-46a8-9158-0df5931c96ba</small>
+<pre></pre>
+<figure><a href="images/9b415b55-3921-4ad2-9c55-bdd14f44cc6d.png"><img loading="lazy" src="images/9b415b55-3921-4ad2-9c55-bdd14f44cc6d.png" alt="Original attachment for source message 167"></a><figcaption>9b415b55-3921-4ad2-9c55-bdd14f44cc6d.png</figcaption></figure>
+</article>
+<article id="m170"><h2>Source message 170 · tool</h2><small>2026-09-06T16:56:49.091237+00:00 · fdddb350-97a7-42e7-97ed-c0635cff6873</small>
+<pre>0.6 0.3720735008548752 460.9304333846995
+0.7 0.4310736911588666 397.84381073906894
+0.8 0.48876000948750464 350.88795456041595
+0.9 0.5449961479175904 314.6811232616872
+1.0 0.5996635866225764 285.99368683685105
+1.1 0.652662249146112 262.769909282138
+1.2 0.7039107338561887 243.63884758580483
+1.3 0.7533461406623636 227.65099698952764
+1.4 0.8009235266444432 214.1278090787494
+</pre>
+</article>
+<article id="m174"><h2>Source message 174 · assistant</h2><small>2026-09-06T16:56:50.110761+00:00 · cd920a4a-bb12-48e0-9163-78260c8cbc93</small>
+<pre>[Certain] This near-field trace kills the idea that the **500–600 Hz depression is intrinsic to the 10s**. Both 10s are essentially smooth through that region when the microphone is close, and L/R track extremely well.
+
+[Likely] Given your **~1.20 m cone-to-front-wall distance**, there is a very interesting candidate: the 500 Hz feature may actually be a **higher-order front-wall SBIR cancellation**, not floor bounce.
+
+For a source about 1.20 m from the wall, the reflection path difference is roughly \(2.4\) m. The cancellation series is approximately:
+
+\[
+f_n=(2n+1)\frac{343}{4d}
+\]
+
+With \(d=1.20\) m:
+
+- 1st: ~71 Hz
+- 2nd: ~214 Hz
+- 3rd: ~357 Hz
+- **4th: ~500 Hz**
+- 5th: ~643 Hz
+
+[Likely] That is suspiciously close to the comb-like behaviour we&#x27;re seeing from the 10s at the listening chair. It also fits the fact that the notch vanishes near-field: the direct sound becomes overwhelmingly stronger than the wall reflection.
+
+### We can prove or disprove that very quickly
+
+[Certain] Don&#x27;t change crossover or gain. Move **one complete cabinet** fore/aft by exactly **20 cm**, measure that 10 alone again from the listening position, and watch the 500 Hz feature.
+
+For example, if you move from:
+
+**1.20 m → 1.00 m from the front wall**
+
+the corresponding SBIR cancellation should move approximately:
+
+**500 Hz → 600 Hz**
+
+If instead you move farther:
+
+**1.20 m → 1.40 m**
+
+it should move roughly:
+
+**500 Hz → 429 Hz**
+
+[Certain] If the dip marches with cabinet-wall distance like that, we&#x27;ve nailed it.
+
+---
+
+One other thing in this near-field plot:
+
+[Likely] Ignore the sharp-looking behaviour around roughly **1.2–1.5 kHz** for the moment. At 20–30 cm from a 10-inch cone you&#x27;re no longer measuring it as a point source; cone/dustcap spatial interference and microphone position can strongly affect the upper-mid near-field response. Near-field is excellent for answering our **500 Hz question**, but I would not use this graph to design the 1.9 kHz crossover.
+
+[Certain] The useful conclusion from this measurement is:
+
+**10s themselves: healthy and beautifully matched.**  
+**500-ish Hz hole: generated after the sound leaves the speaker.**
+
+[Likely] And based on that 1.2 m geometry, **front-wall SBIR is now my first suspect rather than floor bounce.**
+
+The 12-inch LF problem remains a separate question; I&#x27;d test that after this 20 cm displacement test, because the response should tell us immediately whether we&#x27;re dealing with the same reflection family or a different room mode.</pre>
+</article>
+<article id="m175"><h2>Source message 175 · user</h2><small>2026-09-06T17:02:51.918313+00:00 · bbb21b57-111e-4046-b44e-8daf216c8f21</small>
+<pre>Front wall distance of the 12 magnet circa 140cm cone 160
+70 from floor the 12s
+10 cone to front wall circa 140
+135 the 10s from floor
+
+Distance between 12s cone 240cm</pre>
+<figure><a href="images/image-1788714000935.jpg"><img loading="lazy" src="images/image-1788714000935.jpg" alt="Original attachment for source message 175"></a><figcaption>image-1788714000935.jpg</figcaption></figure>
+<figure><a href="images/image-1788714007713.jpg"><img loading="lazy" src="images/image-1788714007713.jpg" alt="Original attachment for source message 175"></a><figcaption>image-1788714007713.jpg</figcaption></figure>
+</article>
+<article id="m179"><h2>Source message 179 · tool</h2><small>2026-09-06T17:03:11.188831+00:00 · 52286fdc-6b86-4251-a331-881b2ed59188</small>
+<pre>1.35 2.737243138634199 3.5146123541579946 0.7773692155237955 220.61588827445706
+0.7 2.7073972741361767 3.1384709652950433 0.4310736911588666 397.84381073906894
+</pre>
+</article>
+<article id="m181"><h2>Source message 181 · tool</h2><small>2026-09-06T17:03:18.814351+00:00 · e4010dd6-b45a-46a4-b199-408f6494a5ce</small>
+<pre>2.5 1.1166509958744282 153.58424488369494
+2.6 1.261819251476763 135.91487037409357
+2.7 1.4115518671476006 121.49748372092012
+2.8 1.5653723449989836 109.55859834109395
+</pre>
+</article>
+<article id="m184"><h2>Source message 184 · assistant</h2><small>2026-09-06T17:03:19.884580+00:00 · 42e70def-497d-4a26-b01d-88e35976dea5</small>
+<pre>[Certain] Those corrected distances change the diagnosis quite a bit: **the 12-inch ~50–60 Hz dip now lines up almost perfectly with front-wall SBIR, while the 10-inch ~500 Hz dip points much more strongly toward the side-wall geometry than I first thought.**
+
+[Certain] For the 12s, use the **cone/acoustic source distance**, not the magnet. With the cone about **1.60 m from the front wall**:
+
+\[
+f_{SBIR} \approx \frac{343}{4d}
+=\frac{343}{4\times1.60}
+\approx 53.6\text{ Hz}
+\]
+
+That is almost dead on your measured LF hole. So for the 12s:
+
+&gt; **~54 Hz predicted → ~50–60 Hz measured**
+
+[Likely] That is very strong evidence that the big LF cancellation is the front-wall reflection.
+
+For the 10s, the cone is about **1.40 m from the front wall**, giving:
+
+\[
+f_1\approx\frac{343}{4\times1.40}\approx61\text{ Hz}
+\]
+
+Higher cancellation orders from that same reflection are approximately:
+
+\[
+61,\ 184,\ 306,\ 429,\ 551\text{ Hz...}
+\]
+
+[Likely] So the front wall can certainly contribute around 400–550 Hz, but there is an even more interesting geometric clue.
+
+You said the room is about **3.50 m wide** and the 12-inch cone centres are **2.40 m apart**. If the speakers are approximately centred laterally:
+
+\[
+\frac{3.50-2.40}{2}=0.55\text{ m}
+\]
+
+So each stack is roughly **55 cm from its side wall**.
+
+That gives a first side-wall SBIR frequency of:
+
+\[
+f_1=\frac{343}{4\times0.55}\approx156\text{ Hz}
+\]
+
+and the next odd cancellation:
+
+\[
+3\times156\approx468\text{ Hz}
+\]
+
+[Likely] **That ~468 Hz prediction is extremely suspicious given your 10-inch listening-position dip around 500 Hz.**
+
+So my current ranking would be:
+
+- [Certain] **12-inch ~50–60 Hz:** front-wall SBIR is the dominant suspect.
+- [Likely] **10-inch ~500 Hz:** side-wall SBIR/higher-order reflection is the strongest suspect.
+- [Likely] Front-wall higher-order reflections are probably contributing to the 10-inch feature as well.
+- [Likely] Floor bounce is less convincing for the 500 Hz hole given your heights.
+
+Using your approximate **2.7 m listening distance**, **10&quot; height 1.35 m**, and **ear height ~0.90 m**, the first floor-reflection cancellation works out nearer **220 Hz**, with its next major odd-order cancellation around **660 Hz**. Neither lands as neatly on 500 Hz as the side-wall estimate does.
+
+And your near-field measurement is important here: [Certain] the 500 Hz depression disappears when the mic is close to the 10. That tells us the driver/cabinet itself is not generating that large hole. It appears through propagation into the room.
+
+### The experiment I would do now
+
+[Likely] Rather than moving the cabinets forward/back first, **move one stack sideways by about 15–20 cm**, keeping front-wall distance unchanged, and measure that 10 alone from the listening position.
+
+If the current side distance is ~55 cm:
+
+- at **55 cm**, predicted higher cancellation ≈ **468 Hz**
+- at **70 cm**, it moves down to ≈ **368 Hz**
+- at **40 cm**, it moves up to ≈ **643 Hz**
+
+That is a huge shift and should be unmistakable in REW.
+
+If the 500-ish dip moves dramatically with the lateral position, we&#x27;ve nailed the side-wall mechanism. If it barely moves, then we test fore/aft position next.
+
+[Certain] And for the 12s, I wouldn&#x27;t bother proving the 54 Hz mechanism yet — **1.60 m predicting 53.6 Hz is already an exceptionally good match to what you&#x27;re measuring.**
+
+The interesting part is that the two troublesome areas are probably **two different SBIR geometries**: front wall for the 12s, side wall/higher-order reflection for the 10s. memcite</pre>
+</article>
+<article id="m185"><h2>Source message 185 · user</h2><small>2026-09-06T17:12:57.975000+00:00 · 1903405f-2f84-4052-8808-3e8972be44bd</small>
+<pre>70 INWARD L/R STACKS</pre>
+<figure><a href="images/5a6b0d33-a530-4cfb-ba42-bf43de5b3ee0.png"><img loading="lazy" src="images/5a6b0d33-a530-4cfb-ba42-bf43de5b3ee0.png" alt="Original attachment for source message 185"></a><figcaption>5a6b0d33-a530-4cfb-ba42-bf43de5b3ee0.png</figcaption></figure>
+</article>
+<article id="m189"><h2>Source message 189 · assistant</h2><small>2026-09-06T17:12:59.498460+00:00 · eff7951a-03eb-4c9c-aa85-44a7dd488dc7</small>
+<pre>[Certain] This is the strongest result yet: **the ~500 Hz depression has essentially vanished.**
+
+[Likely] If by “70 inward” you mean the cone centres are now about **70 cm from the side walls**, then the test strongly supports the side-wall reflection hypothesis. You changed only lateral geometry and the broad 450–600 Hz sag disappeared from the full-stack response.
+
+At 70 cm side-wall distance, the simple cancellation series moves to roughly:
+
+\[
+f_1=\frac{343}{4(0.70)}\approx123\text{ Hz}
+\]
+
+then approximately:
+
+\[
+123,\ 368,\ 613\text{ Hz}
+\]
+
+[Likely] That spreads the interference away from the previous ~500 Hz concentration, which is exactly what this new measurement looks like.
+
+More importantly, look at the overall response now: [Certain] from roughly **100 Hz to 14–15 kHz**, both stacks are hovering remarkably tightly around ~78–82 dB. The midband from 300 Hz through several kHz is now almost boringly good.
+
+That tells us:
+
+- [Certain] the 10s themselves were never the problem;
+- [Likely] the previous 500 Hz hole was dominated by lateral boundary interference;
+- [Certain] the reversed CD polarity is still giving good 10/CD summation;
+- [Certain] L/R matching above ~100 Hz remains excellent.
+
+I would **keep this lateral position** for now.
+
+The remaining ugly part is almost entirely below ~100 Hz. [Certain] You still have different L/R structure around roughly 40–90 Hz, including the front-wall/SBIR region we predicted from the 12&quot; cone distance.
+
+So I’d now stop touching the mids/HF completely.
+
+Next job: **12s only, current inward position, then move the complete stacks fore/aft by a controlled amount—say 20 cm—and remeasure only the 12s.** That will show us whether the ~50–60 Hz feature tracks the 1.6 m front-wall distance as predicted.
+
+[Likely] We may have just solved the 500 Hz issue with nothing more exotic than placement, which is exactly the kind of result you want before thinking about absorption.</pre>
+</article>
+<article id="m190"><h2>Source message 190 · user</h2><small>2026-09-06T17:15:43.060000+00:00 · 4e8d2c0a-a40a-43d5-9e2d-f5feecc3ce41</small>
+<pre>i&#x27;ll stop here for now</pre>
+</article>
+<article id="m191"><h2>Source message 191 · assistant</h2><small>2026-09-06T17:15:43.819396+00:00 · 144882f4-22b4-4792-b721-2c83e14cf0fd</small>
+<pre>[Certain] Stop here — you’ve already reached a clean breakpoint, and more changes now would risk losing track of what actually improved things.
+
+[Certain] Current state worth preserving:
+- CDs **reversed polarity**
+- current gain settings frozen
+- stacks moved inward to the current position
+- mid/HF response now very coherent
+- ~500 Hz problem largely gone
+- remaining work is mainly **below ~100 Hz**
+
+[Likely] Next session, the sensible continuation is just the 12s: isolate them, verify the ~50–60 Hz behavior, then test fore/aft movement without touching anything else.
+
+Save this REW file exactly as it is.</pre>
+</article>
+<article id="m192"><h2>Source message 192 · user</h2><small>2026-09-06T18:23:18.783961+00:00 · bbb212c4-6a57-4101-96dd-266c2cfc40b5</small>
+<pre>By the way before today session, I swapped the amps. I moved the SA8100 From CD to 12s and the class D ayima A70 from 12s to CDs. GCs on the 10s</pre>
+</article>
+<article id="m197"><h2>Source message 197 · assistant</h2><small>2026-09-06T18:23:19.485723+00:00 · 7b413650-0a5f-48f5-99d6-34b302ade90e</small>
+<pre>[Likely] That actually makes today’s REW session **more meaningful, not less**, because all the gain matching and crossover work you just did was performed with the amplifier allocation you intend to hear now.
+
+[Certain] So the current reference configuration is now:
+
+- **12s → Pioneer SA-8100**
+- **10s → Gainclone monoblocks**
+- **CDs → Aiyima A70**
+
+[Likely] That also means we should mentally discard any earlier assumptions about band balance that were based on the old amp assignment. Today’s acoustic measurements already absorbed the different amplifier voltage gains, which is exactly why matching by SPL was the right move.
+
+One thing I would check next time before measuring anything else: [Certain] make sure the **SA-8100 tone controls, loudness, filters and balance are all neutral/off**, because unlike the Gainclones it has extra analogue circuitry that can alter the LF response. And keep the A70 volume/gain position fixed once set.
+
+[Likely] Sonically, the allocation is actually quite sensible for testing: the Gainclones stay on the 10s where you care most about midband drive and clarity, the A70 has trivial power demands on the CDs, and the Pioneer gets the 12s where any vintage tonal character is less exposed than it was on the horn.
+
+The only thing I’d watch is [Likely] **noise on the CDs** with the A70, because a 100+ dB-sensitive compression driver will reveal amplifier hiss immediately. If the horns are quiet at the seat, I wouldn’t worry about it.</pre>
+</article>
+<article id="m198"><h2>Source message 198 · user</h2><small>2026-09-06T18:24:30.897823+00:00 · bbb21460-cf3f-4640-ba3f-5b51b9f69538</small>
+<pre>The SA8100 is in power mode. All the controls are bypassed</pre>
+</article>
+<article id="m199"><h2>Source message 199 · assistant</h2><small>2026-09-06T18:24:31.672001+00:00 · 9058113a-f8a0-4e92-ba92-384bde9646b3</small>
+<pre>[Certain] Then the Pioneer is effectively just a power amp in this setup, so my warning about tone/loudness circuitry doesn’t apply.
+
+[Certain] That makes today’s measurements cleaner to interpret:
+
+- **12s → SA-8100 power amp section**
+- **10s → Gainclones**
+- **CDs → Aiyima A70**
+
+[Likely] The only amp-related variables left that matter acoustically are their actual voltage gain, noise floor, output impedance/damping, and any frequency-response deviation under load. Your REW SPL matching already normalized the gain differences.
+
+[Likely] Given how tightly L/R tracked above ~100 Hz, none of the three amplifier paths is showing an obvious channel-level or bandwidth problem in the measured passbands.
+
+So next time I would treat the amplifier allocation as **fixed reference state**, not another variable to investigate. The remaining obvious problem is room/boundary behaviour in the bass.</pre>
+</article>
+<article id="m200"><h2>Source message 200 · user</h2><small>2026-09-06T18:26:47.887810+00:00 · bbb21c16-e4c5-474c-939b-2beb6c458c55</small>
+<pre>Next change is the addition of another pass 6-24 xover in the make to match the 1st, and the PASS aleph mini for the CDs and the ciuffoli hybrid power follower for the 10s. Lots to come</pre>
+</article>
+<article id="m202"><h2>Source message 202 · assistant</h2><small>2026-09-06T18:26:48.606071+00:00 · bd84a109-6cdb-4279-8d90-a30d6f017ad0</small>
+<pre>[Likely] The main risk is changing too many variables at once and then having no idea which one actually improved—or broke—the system.
+
+[Certain] You’ve now got a very useful baseline:
+- SA-8100 on 12s
+- Gainclones on 10s
+- A70 on CDs
+- gains matched acoustically
+- CDs reversed polarity
+- current speaker placement documented
+- REW response captured
+
+[Likely] I’d preserve that as **Baseline A** and then change one major subsystem at a time.
+
+[Likely] The cleanest order would be:
+
+1. **Install the second Pass 6-24 crossover**
+   - verify gain
+   - verify slopes
+   - verify polarity
+   - rerun isolated bands and full stacks
+
+2. **Install Aleph Mini on CDs**
+   - re-level CD gain only
+   - check hiss/noise
+   - rerun CD + 10 summation
+
+3. **Install Ciuffoli hybrid follower on 10s**
+   - re-level 10 gain
+   - rerun 10-only
+   - redo 10/CD polarity/summation test
+
+4. Only then revisit **room/bass tuning**
+
+[Certain] The reason is simple: the second crossover and the two new amps can all change absolute gain, phase shift, bandwidth, and crossover summation. Even if the nominal crossover frequencies stay identical, the acoustic result can move.
+
+[Likely] The Aleph Mini on the CDs will probably be the least disruptive electrically. The Ciuffoli on the 10s is the one I’d expect to justify a full re-check around the 1.9–2 kHz handoff, because that band is doing most of the work in the presence region.
+
+[Certain] So yes, plenty to come—but now you’ve finally got a measured reference state. That makes every future change much easier to judge instead of relying on memory of how it sounded. memcite</pre>
+</article>
+<article id="m203"><h2>Source message 203 · user</h2><small>2026-09-06T18:36:21.182042+00:00 · bbb212af-d4aa-453c-a0d4-fb9adf6d136c</small>
+<pre>I think when I have the 2nd pass xover, that allows me to change the xover point on the fly, I will test higher hands off with the CD or higher or lower handover with the 12s</pre>
+</article>
+<article id="m207"><h2>Source message 207 · assistant</h2><small>2026-09-06T18:36:21.475434+00:00 · 31c00d49-70bc-4877-ab2a-f7d3930258be</small>
+<pre>[Likely] I’d challenge the instinct to push the **10→CD handoff higher** first; with your geometry, the more promising direction may actually be **slightly lower**, provided the CD/horn remains clean.
+
+[Certain] The second Pass 6-24 is valuable because it lets you optimize the two handoffs independently with the same crossover topology. But I would **mute before changing frequency/slope settings**, especially with the compression drivers, rather than switching while signal is playing.
+
+For the **12→10 crossover**, your current ~300 Hz is already in a sensible region. The important constraint is the large vertical separation: the 12&quot; centre is ~70 cm high and the 10&quot; ~135 cm, so roughly **65 cm apart**.
+
+[Certain] That separation becomes increasingly troublesome as crossover frequency rises:
+
+- 200 Hz: wavelength ~1.72 m → spacing ≈ 0.38 λ
+- 300 Hz: ~1.14 m → ≈ 0.57 λ
+- 400 Hz: ~0.86 m → ≈ 0.76 λ
+- 500 Hz: ~0.69 m → ≈ 0.95 λ
+
+[Likely] So I would test **lower before higher** there: perhaps **220–250–300–350 Hz**. By 450–500 Hz, the two radiators are almost a wavelength apart vertically and the crossover lobe can become much more position-sensitive.
+
+And importantly, [Certain] **do not move the 12/10 crossover upward simply to repair the old ~500 Hz hole**. Today&#x27;s lateral-position test showed that was predominantly an acoustic boundary/interference problem, not insufficient 12&quot; contribution.
+
+For the **10→CD crossover**, the tradeoff is different:
+
+- higher crossover → less excursion/distortion demand on the CD;
+- but the 10&quot; becomes increasingly directional and the physical centre spacing represents more wavelengths;
+- lower crossover → potentially better spatial/directivity integration;
+- but greater demand on the CD and horn.
+
+[Likely] Given what we saw today, I&#x27;d test something like:
+
+**1.6 / 1.8 / 2.0 / 2.2 / 2.4 kHz**
+
+rather than assuming 2.5–3 kHz will be better.
+
+[Likely] I suspect your sweet spot will remain somewhere around **1.8–2.1 kHz**, perhaps slightly below where you are now, because a 10&quot; is already strongly beaming by 2 kHz. Going much higher may make the acoustic handoff worse even if the electrical response looks tidy.
+
+The really powerful thing will be doing each crossover point as a controlled REW set:
+
+**10 only → CD only → summed normal polarity → summed reversed polarity.**
+
+[Certain] Then the winning frequency isn&#x27;t the one with the prettiest isolated curves; it&#x27;s the one giving the **strongest, smoothest summation and deepest reverse-polarity null** around crossover. That directly tells us the acoustic centres are behaving coherently.
+
+For the 12/10 handoff, same principle: isolated drivers plus sum, rather than judging it from the full-stack trace.
+
+[Likely] So when the second 6-24 arrives, I’d treat it as an opportunity to build a little crossover matrix rather than randomly twiddling frequencies. We could probably identify the optimum two crossover points in one disciplined REW session. memcite</pre>
+</article>
+<article id="m208"><h2>Source message 208 · user</h2><small>2026-09-06T18:43:43.377550+00:00 · bbb21af9-7c94-4a58-8637-c4930fbfa475</small>
+<pre>Otherwise I need this! Model9100b music mixer 😂. Would look kool on the deck </pre>
+<figure><a href="images/1000112109.jpg"><img loading="lazy" src="images/1000112109.jpg" alt="Original attachment for source message 208"></a><figcaption>1000112109.jpg</figcaption></figure>
+<figure><a href="images/1000112107.jpg"><img loading="lazy" src="images/1000112107.jpg" alt="Original attachment for source message 208"></a><figcaption>1000112107.jpg</figcaption></figure>
+</article>
+<article id="m213"><h2>Source message 213 · assistant</h2><small>2026-09-06T18:43:48.328220+00:00 · 94b8a0d6-f965-40b1-9872-4514f02e49a0</small>
+<pre>[Likely] The thing you’re missing is that you don’t need it as a mixer — you want it as **industrial audio jewellery**.
+
+[Certain] Visually, yes, it would look **cool as hell** on the deck. The reasons are obvious from the photos:
+
+- [Certain] black faceplate + silver knobs = proper studio aesthetic  
+- [Certain] twin illuminated VU meters = instant focal point  
+- [Certain] dense knob layout = “serious gear” look  
+- [Likely] it matches the whole analogue / custom / DIY identity of your system far better than modern plastic hi-fi boxes
+
+[Likely] But here’s the uncomfortable part: **463,000 JPY for “looks cool on the rack” is a ridiculous buy unless it also solves a real function in your chain.**
+
+I disagree because buying it just for appearance is paying a very serious premium for vibe. Here’s what I’d do instead: only consider it if at least one of these is true:
+
+- [Likely] you genuinely want an **analogue control centre**
+- [Likely] you need multiple sources and proper routing
+- [Likely] you want a tactile preamp/mixer experience as part of daily use
+- [Likely] the sound character / output stage is actually desirable in your system
+
+The risk in your approach is specific:  
+- [Certain] you clutter a system that is currently moving toward **clean active crossover logic**
+- [Likely] you add another gain stage and another variable
+- [Certain] you spend a lot on something that may become decorative rather than useful
+
+[Likely] As a pure styling object, though, it would absolutely elevate the setup. With the wood speakers, exposed amps, and DIY stack, that mixer has the right **Japanese boutique-studio** look.
+
+My blunt take:
+
+- [Certain] **As eye candy:** superb  
+- [Likely] **As system logic:** questionable  
+- [Likely] **As a luxury toy if money doesn’t hurt:** very defensible
+
+If you want, I can also tell you **whether it makes sense functionally in your exact chain**, not just aesthetically.</pre>
+</article>
+<article id="m214"><h2>Source message 214 · user</h2><small>2026-09-06T18:46:57.342908+00:00 · bbb2129f-419d-4363-b172-13a23d45759f</small>
+<pre>We already went down the rabbit hole of designing/engineering a 3 way active xover with gains. But I parked as designed around OPAs and I wanted discrete</pre>
+</article>
+<article id="m217"><h2>Source message 217 · assistant</h2><small>2026-09-06T18:46:58.203766+00:00 · 868f290b-a269-47d4-9489-a987ab9f8947</small>
+<pre>[Likely] The gap is that the **9100B is aesthetically close to the thing you wanted, but architecturally it is almost the opposite of the discrete 3-way crossover project you parked.**
+
+[Certain] What we had been circling around before was not merely “a box with knobs.” The target was essentially:
+
+- 3-way active analogue crossover
+- independent LF / MID / HF gain
+- proper line-level buffering
+- selectable crossover frequencies/slopes
+- ideally discrete signal path rather than op-amp-heavy filtering
+- something that could become the actual control centre of the RIOT stack
+
+[Likely] The 9100B triggers the same instinct because visually it has exactly the right language: **large tactile gain controls, dense analogue interface, meters, black aluminium, proper studio hardware**.
+
+But [Certain] a music mixer does not solve the crossover problem. It gives you channel mixing/EQ/routing, not the precise complementary HP/LP transfer functions, phase behaviour and band isolation we need.
+
+The more interesting idea is actually this:
+
+[Likely] **resurrect the 3-way crossover project, but build the front panel like this.**
+
+Not necessarily clone the 9100B, but steal the interface philosophy:
+
+- three large master knobs across the top: **LOW / MID / HIGH**
+- VU meters centrally
+- smaller controls for crossover frequency
+- switches for 6/12/18/24 dB slopes
+- polarity switches
+- maybe individual mute per band
+- perhaps input/output metering
+- all discrete buffers/gain stages
+- crossover sections modular internally
+
+[Likely] That would fit your system far better than buying the mixer, because then the “cool object on the deck” is also the actual heart of the active system.
+
+And I disagree with the idea that the old design necessarily has to stay parked just because it used op-amps. Here&#x27;s what I&#x27;d do instead: **separate the filtering problem from the gain/buffering problem**. The risk in insisting that every single element be discrete is that the crossover becomes unnecessarily complex, noisy and difficult to trim.
+
+A more sensible architecture could be:
+
+**discrete input buffer → crossover network → discrete gain/output stages**
+
+with the actual filter cells chosen carefully. Or, if you want purity all the way through, we can revisit fully discrete filter topologies, but that becomes a much more serious engineering exercise.
+
+[Likely] The 9100B has probably just reminded you what the finished object should feel like physically. The old crossover design solved the function; this gives us the **industrial-design direction**.</pre>
+</article>
+<article id="m218"><h2>Source message 218 · user</h2><small>2026-09-06T18:49:17.677673+00:00 · bbb21f24-a615-40e4-bcd3-d4820639a548</small>
+<pre>Is there anything out there that fits the bill?</pre>
+</article>
+<article id="m226"><h2>Source message 226 · assistant</h2><small>2026-09-06T18:49:32.406836+00:00 · 46283e0b-5a6b-4967-a7cc-7e5a2e6493a4</small>
+<pre>[Likely] There are products that get close, but **very few hit all three of your requirements at once: true stereo 3-way, flexible crossover points/gain, and a genuinely discrete signal path.**
+
+The closest match I found is the **Pass Labs XVR-1**. [Certain] It is a fully analogue active crossover, highly configurable for 6/12/18/24 dB/octave responses, and Pass described the active stages as discrete circuitry using matched low-noise JFETs driving bipolar output transistors. citeturn683117search0turn683117search6
+
+For your project, that is almost exactly the philosophical target.
+
+The catch is [Certain] it is a **legacy/discontinued product**, so realistically you are looking at the used market rather than buying new. citeturn683117search0
+
+The **First Watt B4** is even more interesting electronically. [Certain] It uses only matched discrete complementary JFET unity-gain buffers, no feedback, polypropylene filter capacitors, and lets each filter pole be set independently from roughly 25 Hz to 6.4 kHz with 6/12/18/24 dB/octave configurations. citeturn683117search43turn218983view1
+
+But here is the problem for you: [Certain] the B4 is fundamentally a **stereo 2-way crossover**, one LP and one HP path per channel. The manual explicitly discusses using it in a 3-way system by leaving the mid/tweeter split passive, rather than providing three active outputs per channel. citeturn218983view1
+
+So one B4 does **not** replace your two Pass 6-24 units.
+
+The other commercially available choices become compromises:
+
+- [Certain] **Sublime Acoustic K231** is a proper stereo 3-way analogue crossover with independent low/mid/high output gain and swappable crossover modules, but it explicitly uses **Burr-Brown op-amps**. So functionally very close, philosophically wrong for what you wanted. It is currently listed at **$599.95**. citeturn218983search0
+- [Certain] **Bryston 10B** is a very serious analogue crossover with selectable frequencies/slopes, but its classic configuration is stereo 2-way or mono 3-way, so again it isn&#x27;t a simple stereo 3-way solution in one chassis. citeturn683117search4turn683117search5
+- [Certain] The current cheap/pro-audio 3-way options exist, but they are not really in the same conceptual category as your RIOT electronics project.
+
+products{&quot;selections&quot;:[[&quot;turn683117product15&quot;,&quot;dbx 234S crossover&quot;]]}
+
+[Likely] For your specific system, the conclusion is slightly annoying: **the thing you want basically exists as the Pass Labs XVR-1 concept, but not as an obvious current-production stereo 3-way discrete crossover with front-panel gain and flexible frequency control.**
+
+And that suggests a more interesting route than resurrecting the old op-amp design wholesale:
+
+**build a stereo 3-way version inspired by the XVR-1 / B4 architecture.**
+
+The signal path could be:
+
+&gt; discrete JFET input buffer → passive RC filter sections → discrete JFET/BJT buffer → band gain → discrete output stage
+
+That avoids the thing you disliked about the earlier design: the filter function doesn&#x27;t need to be implemented as a conventional op-amp state-variable/Sallen-Key machine.
+
+[Likely] In other words, the **First Watt B4 is probably the circuit philosophy you were actually looking for**, while the **XVR-1 is closer to the finished 3-way product architecture**.
+
+If you want, I’d next dig specifically into the **XVR-1 topology and B4 schematic** and see whether we can turn those into a realistic RIOT 3-way crossover rather than starting from our old OPA design.</pre>
+</article>
+<article id="m227"><h2>Source message 227 · user</h2><small>2026-09-06T21:00:25.880096+00:00 · bbb2116e-1791-462a-acf4-019b7ee21a86</small>
+<pre>Then my pass 6-24 xover is basically the first watt B4. https://www.firstwatt.com/wp-content/uploads/2023/12/art_diy-biamp_6-24_-crossover.pdf</pre>
+</article>
+<article id="m234"><h2>Source message 234 · assistant</h2><small>2026-09-06T21:00:29.152127+00:00 · 87b414b9-5e74-4003-a904-d934d3def277</small>
+<pre>[Certain] Yes — your DIYAudio **Pass 6-24 is effectively the DIY ancestor/sibling of the First Watt B4 concept**, and the article you linked makes that explicit in circuit philosophy.
+
+[Certain] The 6-24 is a stereo analogue biamp crossover with **12 discrete JFET buffers, no negative feedback, continuously adjustable RC poles, and selectable 6/12/18/24 dB/oct slopes**. Nelson Pass describes exactly that architecture in the paper. citeturn342646view0
+
+[Certain] It also has the same core idea we were just talking about for the B4: the filters are not built around op-amp active-filter blocks. Instead, the signal path is basically:
+
+**level pot → discrete JFET buffer → passive RC pole sections → discrete JFET buffers**
+
+with the individual RC poles independently adjustable over about a **6:1 frequency range**. citeturn342646view0
+
+So I’d correct what I said earlier: **you already own the topology/philosophy you were looking for.** The missing piece is simply that one 6-24 is a stereo **2-way** crossover. Two of them cascaded give you the 3-way architecture you want.
+
+And there’s another very relevant detail from the paper: [Certain] Pass explicitly notes that with **12 dB/oct filters the high and low drivers are usually operated electrically out of phase**, and for 18 dB/oct he again recommends exploring polarity reversal. citeturn342646view0
+
+That lines up beautifully with what REW showed us today when reversing the CDs improved the 10/CD summation.
+
+[Likely] So the second 6-24 is probably a much better solution for your project than reviving the old op-amp 3-way design. You get:
+
+- discrete JFET signal path
+- no global feedback in the buffers
+- variable crossover points
+- adjustable pole behaviour rather than fixed textbook filters
+- selectable slopes
+- direct REW-driven tuning
+
+[Likely] The only thing the 6-24 lacks versus the “dream crossover” is **front-panel ergonomics**. Electrically, you’re basically already there.
+
+That ARS 9100B is therefore more useful as **industrial-design inspiration** than as something you need to buy. The genuinely interesting project would be to eventually put the **two 6-24 boards into one proper chassis**, bring the useful controls to the front panel, and make it look like the machine you actually wanted.</pre>
+</article>
+<article id="m235"><h2>Source message 235 · user</h2><small>2026-09-06T21:03:12.197550+00:00 · bbb213a9-5abe-420e-9130-2d32a9eef596</small>
+<pre>Currently the active xover that splits 10s and CD is an fixed 12db Sallen key from AliExpress. We tweaked but is not the reverse polarity of the pass.
+
+</pre>
+</article>
+<article id="m240"><h2>Source message 240 · assistant</h2><small>2026-09-06T21:03:14.849175+00:00 · f4e3c2a2-c823-4a09-8ce9-3f8aecf3be3a</small>
+<pre>[Certain] You’re right to separate the two cases: **today’s successful CD polarity reversal belongs to the current AliExpress 12 dB Sallen-Key crossover, not to the Pass 6-24 behavior.**
+
+[Certain] Your present 10/CD split is:
+
+**10s/CDs → fixed 12 dB Sallen-Key AliExpress crossover**  
+and with that network, REW showed that **reversing the CD gives the better acoustic sum**.
+
+[Certain] The Pass paper says that for its own 12 dB implementation, the low and high drivers are *usually* operated electrically opposite in polarity, but that is a statement about the **Pass network’s own phase behavior and tuning**, not a universal rule for all 12 dB crossovers. citeturn469764view0
+
+[Likely] So when the second Pass 6-24 replaces the AliExpress board, I would assume **nothing** about polarity. Even if both are nominally “12 dB/oct,” the actual transfer functions can differ because of Q, pole placement, buffer topology, and how the filter sections are tuned.
+
+[Certain] The correct procedure after the swap is simply to repeat today’s test:
+
+- 10 only
+- CD only
+- 10+CD normal polarity
+- 10+CD reversed polarity
+
+and keep whichever gives the stronger/smoother acoustic sum around the handoff.
+
+[Likely] That is actually one of the strongest reasons to move to the second Pass crossover: we stop being locked into the AliExpress filter’s fixed 12 dB characteristic and can tune the actual acoustic crossover instead of just accepting its electrical one.</pre>
+</article>
+<article id="m241"><h2>Source message 241 · user</h2><small>2026-09-06T21:05:25.463101+00:00 · bbb21fc0-ddd0-47b6-bc9c-5518f84087e5</small>
+<pre>Ok. Different question. This might actually get better with the cloud and panel on the front wall, diffusers mostly. The width and depth of the stage isn&#x27;t great, quite narrow. I&#x27;d suspect bit of TA and diffusion as said</pre>
+</article>
+<article id="m244"><h2>Source message 244 · assistant</h2><small>2026-09-06T21:05:25.824832+00:00 · b81483ff-abfb-4a15-84d0-dc2efbffb98f</small>
+<pre>[Likely] I’d rank **early reflections and geometry ahead of crossover TA** for the narrow/flat stage you’re describing.
+
+[Certain] TA around the 10/CD handoff can affect image focus and vertical/lateral coherence, but it usually does **not** create stage width and depth by itself. Today’s polarity test already got the 10/CD summation into a much healthier place, so I wouldn’t expect TA alone to suddenly make the stage explode outward.
+
+[Likely] The front wall and first-reflection field are more plausible. A strong, coherent front-wall return can pull apparent images toward the speaker plane and reduce perceived depth. Side-wall early reflections can either increase apparent width or blur localization depending on delay, level, and symmetry.
+
+For your room, I’d separate the jobs:
+
+- [Likely] **Front wall:** diffusion can help reduce the “hard mirror” character and increase apparent depth, especially behind/between the speakers.
+- [Likely] **Ceiling cloud:** more likely to improve image precision and reduce vertical smear than dramatically widen the stage.
+- [Likely] **Side reflection treatment/geometry:** more influential on perceived width than the front wall.
+
+[Likely] One caution: if the front-wall “diffusers” are shallow, they may behave more like irregular reflectors than true broadband diffusers at the frequencies that matter for imaging. That can still be useful, but the effect is different. A proper diffuser needs enough depth to scatter meaningfully through the lower mids; otherwise it mostly affects upper mids/HF.
+
+[Certain] Your current speaker spacing is about **2.4 m**, with listening distance around **2.7 m**, so the basic triangle is not inherently too narrow. That makes me suspect the room is constraining the apparent stage more than speaker spacing is.
+
+[Likely] The most useful order from here would be:
+
+**1. Keep today&#x27;s speaker position.**  
+**2. Add the cloud/front-wall treatment.**  
+**3. Listen and REW again before touching toe-in or TA.**  
+**4. Then experiment with toe-in and very small fore/aft changes.**  
+**5. Only after that fine-tune crossover TA.**
+
+[Likely] For stage depth specifically, I’d expect the **front wall treatment** to be the more interesting change. For stage width, I’d expect **toe-in + side-wall reflection balance** to matter more.
+
+[Certain] And because your L/R frequency responses now track so closely above ~100 Hz, you’ve got a good baseline for hearing spatial changes without confusing them with tonal imbalance.</pre>
+</article>
+<article id="m245"><h2>Source message 245 · user</h2><small>2026-09-07T18:22:22.380000+00:00 · 7f26cdef-4c31-4275-a481-85d33cb9c48a</small>
+<pre>let&#x27;s have a look at TA from the REW i took yesterday</pre>
+</article>
+<article id="m258"><h2>Source message 258 · user</h2><small>2026-09-07T18:31:08.301000+00:00 · ade70171-4ad8-42a8-b360-e8bd02a0da3e</small>
+<pre>let&#x27;s use yesterday takes to look together at TA&gt; which screen shall I share? waterfall? impulse?</pre>
+</article>
+<article id="m261"><h2>Source message 261 · assistant</h2><small>2026-09-07T18:30:11.287593+00:00 · 60dac474-68ab-4acc-b956-fdc7b62eafee</small>
+<pre>[Certain] **Not waterfall.** For TA, the first useful screen is **Impulse**.
+
+Share this first:
+
+1. Open **one isolated driver measurement**, ideally `L10`.
+2. Go to the **Impulse** tab.
+3. Show the full impulse plot with the time axis visible.
+4. Then do the same for `LCD`.
+
+[Certain] If yesterday’s sweeps were taken **without an acoustic timing reference**, the absolute impulse zero points may not be comparable between separate sweeps. In that case, we cannot directly say “the CD is X ms early/late” from those two impulse plots alone.
+
+[Likely] But we can still learn something from the shape and, more importantly, from the **phase view around the crossover**.
+
+So after Impulse, the next screen I want is:
+
+- `L10` and `LCD` overlaid
+- **SPL &amp; Phase**
+- zoomed roughly **1 kHz to 4 kHz**
+- phase traces visible
+
+[Certain] The most decisive screen, though, is the one you already have indirectly:
+
+- `L10`
+- `LCD`
+- `L10+CD normal`
+- `L10+CD reversed`
+
+That magnitude summation already told us the current polarity relation. For actual TA in milliseconds, we need timing-reference-capable measurements.
+
+So start by sharing **Impulse for L10 and LCD**. Then we’ll see whether yesterday’s captures give us enough timing information or whether we need a fresh timed pair.</pre>
+</article>
+<article id="m262"><h2>Source message 262 · user</h2><small>2026-09-07T18:34:34.709000+00:00 · 6b82624b-5630-4fc4-ab9a-1c8593d0fcf8</small>
+<pre>can&#x27;tt do SPL&amp;phase of 3 measurements at the same time, can do only in All SPL</pre>
+<p>Attachment inaccessible: file_0000000065e082108f4657765afa2930</p>
+<p>Attachment inaccessible: file_000000000de88243b7d307cdec456d79</p>
+<p>Attachment inaccessible: file_000000004fdc824693a890d6c7089b45</p>
+<p>Attachment inaccessible: file_0000000002b4821090951c57568d1b0b</p>
+</article>
+<article id="m266"><h2>Source message 266 · assistant</h2><small>2026-09-07T18:33:50.391116+00:00 · 618438ad-5c62-4028-b752-cf09ae926f11</small>
+<pre>[Certain] Don’t try to overlay three measurements in **SPL &amp; Phase** — that’s the wrong REW screen for this job. We only need the **two individual drivers** to inspect TA; the summed measurement is the validation afterward.
+
+[Certain] Your screenshots also contain an important clue: the CD impulse shows a separate **“Ref” pulse around −3 ms** and the driver response around 0 ms. That looks like yesterday’s measurement **did have an acoustic timing reference**. If the L10 measurement was taken in the same way, then we can legitimately compare their relative phase/time. That’s much better than I thought from the earlier `.mdat` description.
+
+### Use this REW screen
+
+Go to:
+
+**Overlays → Phase**
+
+Then select only:
+
+- `L10`
+- `L CD take 2`
+
+Turn off everything else.
+
+Zoom the frequency axis to approximately:
+
+**1 kHz → 4 kHz**
+
+[Certain] Do **not** use smoothing on phase if REW allows you to avoid it. We want to see where the two phase traces sit relative to each other around the acoustic crossover, approximately 1.8–2.5 kHz.
+
+That screenshot is the one I want next.
+
+---
+
+### What your individual phase screenshots already suggest
+
+[Likely] Around ~2 kHz, the phase relationship does **not** look coincident in the original electrical polarity. There appears to be something approaching a large phase separation, which agrees perfectly with yesterday&#x27;s magnitude test:
+
+**normal polarity → weak summation**  
+**CD reversed → strong summation**
+
+[Certain] The reversed-polarity magnitude test already proved the drivers are much closer to constructive phase after adding 180° to the CD.
+
+What we now want to find out is whether, **after that 180° correction**, there is still something like:
+
+- 10–20° residual difference → basically excellent
+- 30–60° → worthwhile fine TA adjustment
+- 90°+ → meaningful acoustic offset remains
+
+At 2 kHz, for reference:
+
+- [Certain] one cycle = **0.500 ms**
+- 180° = **0.250 ms**
+- 90° = **0.125 ms**
+- 45° = **0.0625 ms**
+
+And acoustically:
+
+- 0.10 ms ≈ **34 mm**
+- 0.20 ms ≈ **69 mm**
+- 0.30 ms ≈ **103 mm**
+
+So once we have the two phase traces on the same plot, we can translate the residual phase error into an approximate **fore/aft acoustic-centre correction in millimetres**.
+
+### Impulse is useful too, but second
+
+[Certain] Keep the impulse screenshots; they&#x27;re useful. But because the 10 and CD are band-limited very differently, simply comparing the location of their largest impulse peaks can be misleading. **Phase through the crossover region is the more appropriate TA metric.**
+
+So next screen:
+
+**Overlays → Phase → L10 + LCD only → 1–4 kHz.**
+
+Then we can actually quantify what TA is left rather than eyeballing it.</pre>
+</article>
+<article id="m267"><h2>Source message 267 · user</h2><small>2026-09-07T18:36:42.174000+00:00 · 4c7680b9-9ba4-4e09-898f-f3f83ebcfa86</small>
+<pre></pre>
+<p>Attachment inaccessible: file_0000000050d882108d34d15d57e01784</p>
+</article>
+<article id="m269"><h2>Source message 269 · assistant</h2><small>2026-09-07T18:35:53.408544+00:00 · c2ad06f3-0f0b-4f7b-8ed0-40baa82e20d0</small>
+<pre>[Certain] Don’t read that phase separation as “the CD is X ms late” yet — this plot contains **both propagation delay and the electrical/acoustic phase rotation of the two filters/drivers**.
+
+[Certain] But it does show something useful. Around the actual overlap, roughly **2.0–2.3 kHz**, the two traces are substantially separated in normal electrical polarity:
+
+- around **2.0 kHz**: separation is roughly **140–150°**
+- around **2.15–2.2 kHz**: more like **90–110°**
+- around **2.3 kHz**: still around **70–90°**, depending on how you unwrap the traces
+
+[Certain] That is entirely consistent with yesterday’s empirical result: **normal polarity summed poorly, reversing the CD improved the crossover strongly.**
+
+Once you reverse the CD electrically, you add 180° to its phase. So the residual phase mismatch around crossover becomes roughly:
+
+- at ~2.0 kHz: maybe **30–40°**
+- at ~2.2 kHz: perhaps **70–90°**
+- across the whole overlap: clearly not a perfectly parallel/constant-offset pair
+
+[Likely] That last point is important: **this does not look like a simple pure time-delay error only.** If it were purely a fixed acoustic offset, the relative phase difference would change with frequency in a very predictable linear way. Here the phase shapes are being heavily influenced by the Sallen-Key slopes, the natural rolloff of the 10&quot;, the horn/CD response, and room reflections.
+
+So I disagree with trying to calculate TA from one point on this graph. Here&#x27;s what I&#x27;d do instead: use **REW’s Alignment Tool** on the isolated `L10` and `L CD take 2`. The risk in doing a hand calculation from, say, 2.1 kHz is that we would attribute filter phase to physical distance and move a driver by the wrong amount.
+
+### Best next screen
+
+[Certain] In REW, open:
+
+**All SPL → Controls → Alignment Tool**
+
+Choose:
+
+- Measurement A: `L10`
+- Measurement B: `L CD take 2`
+
+Set the alignment region around approximately **1.5–3 kHz** or centre near **2.0–2.2 kHz**.
+
+Then show me that screen with:
+
+- the two source traces
+- predicted sum
+- delay control/value
+- polarity option if displayed
+
+[Certain] That tool is made specifically for this problem: it shifts one measurement in time and predicts the resulting acoustic sum.
+
+And we have an excellent sanity check from yesterday: whatever REW predicts should agree with the **actual reversed-polarity 10+CD measurement**. If the prediction says “reverse CD + ~0.08 ms” gives the best sum, and the real measured sum behaves similarly, then we can trust the TA estimate.
+
+[Likely] My preliminary expectation from this phase plot is **not a huge correction**. After reversing polarity, I suspect we are talking something on the order of **tens of microseconds to perhaps ~0.1 ms**, not a massive 0.3–0.5 ms shift. But I would not put a physical millimetre number on it until we see the Alignment Tool.</pre>
+</article>
+</html>

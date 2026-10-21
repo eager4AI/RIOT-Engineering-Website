@@ -1,0 +1,92 @@
+[
+  {
+    "id": "AC-REW-SRC-001",
+    "file": "REW_06_09(1).mdat",
+    "path": "measurements/rew/REW_06_09(1).mdat",
+    "projects": [
+      "room"
+    ],
+    "role": "original REW measurement source",
+    "library_file_id": "libfile_6e15757fb4e88191bb096a2af211d0a6",
+    "size_bytes": 14603605,
+    "sha256": "75cc3da5cb862bf6d6dd192f61766ef33153a508e45b7e4d8c857e46db960183",
+    "evidence_status": "SOURCE RECOVERED \u2014 CONTENTS AWAITING INSPECTION",
+    "measurement_date": null,
+    "date_note": "Filename date has not been verified against internal measurement timestamps."
+  },
+  {
+    "id": "AC-REW-SRC-002",
+    "file": "REW_06_09.mdat",
+    "path": "measurements/rew/REW_06_09.mdat",
+    "projects": [
+      "room"
+    ],
+    "role": "original REW measurement source",
+    "library_file_id": "libfile_2be8a22074fc8191acb49ad439ba8f9e",
+    "size_bytes": 5315864,
+    "sha256": "3c119dbc5fe272fc818d96b052a7319084f032b9b242d4c5d0a9da949f4a5e3f",
+    "evidence_status": "SOURCE RECOVERED \u2014 CONTENTS AWAITING INSPECTION",
+    "measurement_date": null,
+    "date_note": "Filename date has not been verified against internal measurement timestamps."
+  },
+  {
+    "id": "AC-REW-SRC-003",
+    "file": "REW_09_09(1).mdat",
+    "path": "measurements/rew/REW_09_09(1).mdat",
+    "projects": [
+      "room"
+    ],
+    "role": "original REW measurement source",
+    "library_file_id": "libfile_b4f6d52789948191bec43dfaf7a92501",
+    "size_bytes": 5317946,
+    "sha256": "48372d1f294916b54d0d78bd1ad1ad46b6d85308f5832c2db7d3523c73388e3e",
+    "evidence_status": "SOURCE RECOVERED \u2014 CONTENTS AWAITING INSPECTION",
+    "measurement_date": null,
+    "date_note": "Filename date has not been verified against internal measurement timestamps."
+  },
+  {
+    "id": "AC-REW-SRC-004",
+    "file": "REW_09_09(2).mdat",
+    "path": "measurements/rew/REW_09_09(2).mdat",
+    "projects": [
+      "room"
+    ],
+    "role": "original REW measurement source",
+    "library_file_id": "libfile_22afe67875b481918096810be2f083d3",
+    "size_bytes": 10626958,
+    "sha256": "c2164799d6024d6e62456685959bdb7d5ebb5aa2054165a7c345c11a481881ed",
+    "evidence_status": "SOURCE RECOVERED \u2014 CONTENTS AWAITING INSPECTION",
+    "measurement_date": null,
+    "date_note": "Filename date has not been verified against internal measurement timestamps."
+  },
+  {
+    "id": "AC-REW-SRC-005",
+    "file": "REW_09_09.mdat",
+    "path": "measurements/rew/REW_09_09.mdat",
+    "projects": [
+      "room"
+    ],
+    "role": "original REW measurement source",
+    "library_file_id": "libfile_e0f8e849df188191bd204aa57c3c9b03",
+    "size_bytes": 5317967,
+    "sha256": "a45908c2a5411e761486b55a6a68302a3893c6696fe2d0759b72671c93cb945d",
+    "evidence_status": "SOURCE RECOVERED \u2014 CONTENTS AWAITING INSPECTION",
+    "measurement_date": null,
+    "date_note": "Filename date has not been verified against internal measurement timestamps."
+  },
+  {
+    "id": "AC-REW-SRC-006",
+    "file": "REW_09_09_listening.mdat",
+    "path": "measurements/rew/REW_09_09_listening.mdat",
+    "projects": [
+      "room"
+    ],
+    "role": "original REW measurement source",
+    "library_file_id": "libfile_d68c474ecfd881918a05d18efbbe5f35",
+    "size_bytes": 11290973,
+    "sha256": "f9088af903559177d2af573cc5757e71da3308f2da80e4d46b17b4c817d380ec",
+    "evidence_status": "SOURCE RECOVERED \u2014 CONTENTS AWAITING INSPECTION",
+    "measurement_date": null,
+    "date_note": "Filename date has not been verified against internal measurement timestamps."
+  }
+]

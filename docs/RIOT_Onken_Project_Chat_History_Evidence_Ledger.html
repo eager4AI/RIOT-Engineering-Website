@@ -1,0 +1,76 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="index,follow"><link rel="canonical" href="https://riot-electric-ballroom-archive.aquadove2.chatgpt.site/docs/RIOT_Onken_Project_Chat_History_Evidence_Ledger.html"><title>RIOT Onken Project Chat History Evidence Ledger / RIOT Archive</title><style>body{margin:0;background:#111315;color:#edf1f2;font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}.wrap{max-width:1100px;margin:auto;padding:24px 22px 64px}a{color:#65d5dc}nav{font-size:.9rem;border-bottom:1px solid #344047;padding:0 0 14px;margin-bottom:22px}header{border-bottom:1px solid #344047;padding-bottom:18px;margin-bottom:24px}.eyebrow{color:#65d5dc;font-size:.75rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase}h1{font-size:clamp(2rem,5vw,3.6rem);line-height:1.05;letter-spacing:-.04em;margin:.3em 0}.source{color:#9aa7ad}article{overflow-wrap:anywhere}article h1,article h2,article h3,article h4{line-height:1.25;margin-top:1.8em}article h1{font-size:2rem}article h2{color:#65d5dc;font-size:1.35rem}article table{border-collapse:collapse;width:100%;display:block;overflow-x:auto;margin:18px 0;font-size:.9rem}article th,article td{border:1px solid #455159;padding:9px;text-align:left;vertical-align:top}article th{background:#26343d}article img{max-width:100%;height:auto}article pre{overflow:auto;background:#0e1112;padding:12px;border-radius:8px}article blockquote{border-left:3px solid #65d5dc;margin-left:0;padding-left:16px;color:#bdc7ca}@media(max-width:600px){.wrap{padding:16px 13px 40px}}</style></head><body><main class="wrap"><nav><a href="../index.html">RIOT archive</a> · <a href="../repository.html">Project record</a> · <a href="RIOT_Onken_Project_Chat_History_Evidence_Ledger.docx" download>Download original DOCX</a></nav><header><div class="eyebrow">RIOT Electric Ballroom / source document HTML</div><h1>RIOT Onken Project Chat History Evidence Ledger</h1><p class="source">Full text converted from the archived DOCX. This static HTML response includes the document content without client-side rendering.</p></header><article><p><em>Recovered project history, document map and source-evidence gaps</em></p>
+<p>This ledger is the control document for the first chat-history extraction pass. It distinguishes recoverable project history from raw source files that still need to be attached. Known means repeated or explicit project context; to verify means it should not be treated as a final as-built measurement.</p>
+<h1 id="archive-scope">Archive scope</h1>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Project area</strong></th>
+<th><strong>Primary home</strong></th>
+<th><strong>What was recovered</strong></th>
+<th><strong>Still required</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Room acoustics / REW</td>
+<td>RIOT Room Acoustics and REW Dossier</td>
+<td>Room dimensions, placement, microphone and sweep method, reported response features, treatment plan</td>
+<td>Raw REW files, complete plots, dates and fixed-position measurement metadata</td>
+</tr>
+<tr class="even">
+<td>Loudspeakers</td>
+<td>RIOT Loudspeaker Systems Dossier</td>
+<td>12 inch, 10 inch Bianco and CD44-PK roles; cabinet and horn design history; listening targets</td>
+<td>As-built dimensions, revision tags, final impedance/tuning and completed-waveguide response</td>
+</tr>
+<tr class="odd">
+<td>Crossover / analogue signal</td>
+<td>Pass 6-24 Three-Way Crossover Dossier</td>
+<td>300 Hz / 1.9 kHz architecture, board assignment, build and verification gates</td>
+<td>Final wiring photographs, rail measurements and completed stereo-channel checkout</td>
+</tr>
+<tr class="even">
+<td>Digital source</td>
+<td>RIOT Digital Audio Chain Dossier</td>
+<td>Debian, PipeWire, MPD, Firefox/Qobuz, CamillaDSP and Amanero routing; level references</td>
+<td>Current YAML/config exports, final PipeWire profiles and scope-confirmed levels</td>
+</tr>
+<tr class="odd">
+<td>Amplifiers / circuits</td>
+<td>Headbanger dossier plus project index</td>
+<td>Headbanger Rev A baseline, JFET CCS operating points, LM3886/Aleph/Ciuffoli branches</td>
+<td>Bench scope captures, thermal/load results and revision-linked build evidence</td>
+</tr>
+<tr class="even">
+<td>Workshop infrastructure</td>
+<td>Project index</td>
+<td>Bench PSU requirements, transformer options, HANMATEK scope commissioning plan</td>
+<td>Final PSU schematic/enclosure and instrument commissioning record</td>
+</tr>
+</tbody>
+</table>
+<h1 id="where-each-measurement-belongs">Where each measurement belongs</h1>
+<ul>
+<li><p>Room response, SBIR, placement, seat position and treatment effects belong in Room Acoustics / REW.</p></li>
+<li><p>Nearfield driver response, impedance, cabinet tuning, horn geometry and acoustic-axis response belong in Loudspeakers.</p></li>
+<li><p>DAC output, crossover input/output level, CamillaDSP gain/filter state and source routing belong in Digital Source.</p></li>
+<li><p>Amplifier waveform, clipping, bias, thermal behaviour and load stability belong in the relevant amplifier dossier.</p></li>
+<li><p>Every record should carry a shared metadata block: date, revision, source, amplifier, crossover state, speaker position, microphone position, level and file name.</p></li>
+</ul>
+<h1 id="first-pass-conclusion">First-pass conclusion</h1>
+<p>The archive is sufficiently recovered to guide the next engineering session, but it is not yet a substitute for the missing raw evidence. The next highest-value action is not more recollection: it is attaching the original REW exports, configuration files, build photographs and scope captures, then assigning each item a revision and measurement ID.</p>
+<h1 id="next-extraction-queue">Next extraction queue</h1>
+<ol type="1">
+<li><p>Attach raw REW captures and screenshots; index them once under Measurements.</p></li>
+<li><p>Export the current CamillaDSP and PipeWire configuration used by the listening system.</p></li>
+<li><p>Photograph the as-built 12 inch, 10 inch and CD44-PK assemblies with a ruler/reference scale.</p></li>
+<li><p>Commission the HANMATEK scope and capture source, crossover and amplifier waveforms at 100 Hz, 1 kHz and 10 kHz.</p></li>
+<li><p>Append revision tags to every cabinet, horn and crossover drawing before comparing response data.</p></li>
+</ol>
+</article></main></body></html>

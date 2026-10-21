@@ -1,0 +1,8 @@
+L 12s splCalOffset 126.056 sweepLevel -12.0 micSensitivity -2.056 targetLevel 75.0 savedColor {'falpha': 0.0, 'value': -2749696, 'cs': None, 'frgbvalue': None, 'fvalue': None}
+L10 splCalOffset 126.056 sweepLevel -12.0 micSensitivity -2.056 targetLevel 75.0 savedColor {'falpha': 0.0, 'value': -16747280, 'cs': None, 'frgbvalue': None, 'fvalue': None}
+L CD splCalOffset 126.056 sweepLevel -12.0 micSensitivity -2.056 targetLevel 75.0 savedColor {'falpha': 0.0, 'value': -1669632, 'cs': None, 'frgbvalue': None, 'fvalue': None}
+R CD splCalOffset 126.056 sweepLevel -12.0 micSensitivity -2.056 targetLevel 75.0 savedColor {'falpha': 0.0, 'value': -3366144, 'cs': None, 'frgbvalue': None, 'fvalue': None}
+R 10 splCalOffset 126.056 sweepLevel -12.0 micSensitivity -2.056 targetLevel 75.0 savedColor {'falpha': 0.0, 'value': -16724842, 'cs': None, 'frgbvalue': None, 'fvalue': None}
+R 12 splCalOffset 126.056 sweepLevel -12.0 micSensitivity -2.056 targetLevel 75.0 savedColor {'falpha': 0.0, 'value': -9869350, 'cs': None, 'frgbvalue': None, 'fvalue': None}
+L Stack splCalOffset 126.056 sweepLevel -12.0 micSensitivity -2.056 targetLevel 75.0 savedColor {'falpha': 0.0, 'value': -2749696, 'cs': None, 'frgbvalue': None, 'fvalue': None}
+R stack splCalOffset 126.056 sweepLevel -12.0 micSensitivity -2.056 targetLevel 75.0 savedColor {'falpha': 0.0, 'value': -14972885, 'cs': None, 'frgbvalue': None, 'fvalue': None}

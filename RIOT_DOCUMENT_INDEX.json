@@ -1,0 +1,296 @@
+{
+  "archive": "RIOT Electric Ballroom / Onken Project",
+  "privacy": "custom-owner-only",
+  "context": "RIOT_PROJECT_CONTEXT.md",
+  "documents": [
+    {
+      "file": "RIOT_Onken_Project_Chat_History_Evidence_Ledger.docx",
+      "projects": [
+        "all"
+      ],
+      "role": "evidence boundary and filing rules",
+      "html": "docs/RIOT_Onken_Project_Chat_History_Evidence_Ledger.html"
+    },
+    {
+      "file": "RIOT_Electric_Ballroom_Project_Index.docx",
+      "projects": [
+        "all"
+      ],
+      "role": "master project index",
+      "html": "docs/RIOT_Electric_Ballroom_Project_Index.html"
+    },
+    {
+      "file": "RIOT_Room_Acoustics_and_REW_Dossier.docx",
+      "projects": [
+        "room",
+        "bass12",
+        "mid10",
+        "horns",
+        "digital"
+      ],
+      "role": "acoustic measurement and validation; recovered 6–7 September chronology and configurations",
+      "revision": 2,
+      "updated_on": "2026-10-16",
+      "html": "docs/RIOT_Room_Acoustics_and_REW_Dossier.html",
+      "primary_sources": [
+        "AC-HIST-20260906"
+      ]
+    },
+    {
+      "file": "RIOT_Loudspeaker_Systems_Dossier.docx",
+      "projects": [
+        "bass12",
+        "mid10",
+        "horns",
+        "lm3886",
+        "aleph",
+        "ciuffoli"
+      ],
+      "role": "loudspeaker systems and listening targets",
+      "html": "docs/RIOT_Loudspeaker_Systems_Dossier.html"
+    },
+    {
+      "file": "RIOT_Digital_Audio_Chain_Dossier.docx",
+      "projects": [
+        "digital",
+        "room",
+        "xo",
+        "jfet"
+      ],
+      "role": "source, DSP, DAC and level metadata",
+      "html": "docs/RIOT_Digital_Audio_Chain_Dossier.html"
+    },
+    {
+      "file": "Pass_6-24_Three-Way_Crossover_Dossier.docx",
+      "projects": [
+        "xo",
+        "digital",
+        "room"
+      ],
+      "role": "Pass BIAMP 6-24 three-way crossover as-built dossier; owner-confirmed physical implementation, electrical validation pending",
+      "html": "docs/Pass_BIAMP_6-24_Three_Way_Build.html",
+      "revision": 3,
+      "updated_on": "2026-10-16",
+      "evidence_status": "AS-BUILT — OWNER CONFIRMED / ELECTRICAL VALIDATION PENDING",
+      "note": "Two assembled/installed boards reported by owner. Construction photos absent from supplied updated HTML; T4 copper-net continuity and electrical measurements remain open. Candidate 250-A is simulation-only, not as-built."
+    },
+    {
+      "file": "RIOT_Headbanger_Rev_A_Engineering_Dossier.docx",
+      "projects": [
+        "headbanger",
+        "jfet"
+      ],
+      "role": "Headbanger Rev A engineering baseline",
+      "html": "docs/RIOT_Headbanger_Rev_A_Engineering_Dossier.html"
+    },
+    {
+      "file": "crazy-ideas/ci-002-6v6gt-ultralinear-pp-monoblocks.html",
+      "projects": [
+        "crazy_ideas",
+        "mid10"
+      ],
+      "role": "CI-002 research record; source circuit and feasibility study; not approved for build",
+      "primary_source": "https://www.r-type.org/articles/art-351.htm",
+      "classification": "RESEARCH — NOT APPROVED FOR BUILD"
+    },
+    {
+      "file": "Pass_BIAMP_6-24_Three_Way_Build.html",
+      "html": "docs/Pass_BIAMP_6-24_Three_Way_Build.html",
+      "projects": [
+        "xo"
+      ],
+      "role": "Engineering journal; Candidate 250-A and preserved 300 Hz baseline with schematic evidence",
+      "revision": 3,
+      "updated_on": "2026-10-16",
+      "evidence_status": "SCREENSHOT-DERIVED SIMULATION CANDIDATE; ASSEMBLY ONGOING; COMMISSIONING PENDING"
+    }
+  ],
+  "missing_source_evidence": [
+    "current CamillaDSP/PipeWire configuration",
+    "as-built cabinet and horn photographs",
+    "scope commissioning and amplifier captures",
+    "per-capture timing-reference consistency and five 7 September impulse/phase images; current settings beyond this dated source"
+  ],
+  "measurement_sources": [
+    {
+      "id": "AC-REW-SRC-001",
+      "file": "REW_06_09(1).mdat",
+      "path": "measurements/rew/REW_06_09(1).mdat",
+      "projects": [
+        "room"
+      ],
+      "role": "original REW measurement source",
+      "library_file_id": "libfile_6e15757fb4e88191bb096a2af211d0a6",
+      "size_bytes": 14603605,
+      "sha256": "75cc3da5cb862bf6d6dd192f61766ef33153a508e45b7e4d8c857e46db960183",
+      "evidence_status": "SOURCE RECOVERED — CONTENTS AWAITING INSPECTION",
+      "measurement_date": null,
+      "date_note": "Filename date has not been verified against internal measurement timestamps."
+    },
+    {
+      "id": "AC-REW-SRC-002",
+      "file": "REW_06_09.mdat",
+      "path": "measurements/rew/REW_06_09.mdat",
+      "projects": [
+        "room"
+      ],
+      "role": "original REW measurement source",
+      "library_file_id": "libfile_2be8a22074fc8191acb49ad439ba8f9e",
+      "size_bytes": 5315864,
+      "sha256": "3c119dbc5fe272fc818d96b052a7319084f032b9b242d4c5d0a9da949f4a5e3f",
+      "evidence_status": "SOURCE RECOVERED — CONTENTS AWAITING INSPECTION",
+      "measurement_date": null,
+      "date_note": "Filename date has not been verified against internal measurement timestamps."
+    },
+    {
+      "id": "AC-REW-SRC-003",
+      "file": "REW_09_09(1).mdat",
+      "path": "measurements/rew/REW_09_09(1).mdat",
+      "projects": [
+        "room"
+      ],
+      "role": "original REW measurement source",
+      "library_file_id": "libfile_b4f6d52789948191bec43dfaf7a92501",
+      "size_bytes": 5317946,
+      "sha256": "48372d1f294916b54d0d78bd1ad1ad46b6d85308f5832c2db7d3523c73388e3e",
+      "evidence_status": "SOURCE RECOVERED — CONTENTS AWAITING INSPECTION",
+      "measurement_date": null,
+      "date_note": "Filename date has not been verified against internal measurement timestamps."
+    },
+    {
+      "id": "AC-REW-SRC-004",
+      "file": "REW_09_09(2).mdat",
+      "path": "measurements/rew/REW_09_09(2).mdat",
+      "projects": [
+        "room"
+      ],
+      "role": "original REW measurement source",
+      "library_file_id": "libfile_22afe67875b481918096810be2f083d3",
+      "size_bytes": 10626958,
+      "sha256": "c2164799d6024d6e62456685959bdb7d5ebb5aa2054165a7c345c11a481881ed",
+      "evidence_status": "SOURCE RECOVERED — CONTENTS AWAITING INSPECTION",
+      "measurement_date": null,
+      "date_note": "Filename date has not been verified against internal measurement timestamps."
+    },
+    {
+      "id": "AC-REW-SRC-005",
+      "file": "REW_09_09.mdat",
+      "path": "measurements/rew/REW_09_09.mdat",
+      "projects": [
+        "room"
+      ],
+      "role": "original REW measurement source",
+      "library_file_id": "libfile_e0f8e849df188191bd204aa57c3c9b03",
+      "size_bytes": 5317967,
+      "sha256": "a45908c2a5411e761486b55a6a68302a3893c6696fe2d0759b72671c93cb945d",
+      "evidence_status": "SOURCE RECOVERED — CONTENTS AWAITING INSPECTION",
+      "measurement_date": null,
+      "date_note": "Filename date has not been verified against internal measurement timestamps."
+    },
+    {
+      "id": "AC-REW-SRC-006",
+      "file": "REW_09_09_listening.mdat",
+      "path": "measurements/rew/REW_09_09_listening.mdat",
+      "projects": [
+        "room"
+      ],
+      "role": "original REW measurement source",
+      "library_file_id": "libfile_d68c474ecfd881918a05d18efbbe5f35",
+      "size_bytes": 11290973,
+      "sha256": "f9088af903559177d2af573cc5757e71da3308f2da80e4d46b17b4c817d380ec",
+      "evidence_status": "SOURCE RECOVERED — CONTENTS AWAITING INSPECTION",
+      "measurement_date": null,
+      "date_note": "Filename date has not been verified against internal measurement timestamps."
+    }
+  ],
+  "historical_sources": [
+    {
+      "id": "AC-HIST-20260906",
+      "title": "REW Gain Alignment",
+      "url": "https://chatgpt.com/share/6ad15ab7-8824-83eb-ab2f-4887aca9e51a?ogimg=plain",
+      "dates": "2026-09-06 / 2026-09-07 Europe/Rome",
+      "path": "measurements/rew/history-2026-09-06/transcript.html",
+      "structured_record": "measurements/rew/history-2026-09-06/conversation-record.json",
+      "image_register": "measurements/rew/history-2026-09-06/image-register.json",
+      "visible_records": 87,
+      "recovered_image_count": 22,
+      "inaccessible_image_count": 5,
+      "scope": "Dated Sallen–Key crossover session; not a current Pass configuration baseline"
+    }
+  ],
+  "crazy_ideas": [
+    {
+      "id": "CI-002",
+      "title": "6V6GT Ultralinear Push-Pull Monoblocks",
+      "html": "crazy-ideas/ci-002-6v6gt-ultralinear-pp-monoblocks.html",
+      "index_html": "crazy-ideas/index.html",
+      "status": "RESEARCH — NOT APPROVED FOR BUILD",
+      "primary_source": "https://www.r-type.org/articles/art-351.htm",
+      "baseline_change": false
+    }
+  ],
+  "project_pages": [
+    {
+      "template": "bom.html?id=<project-id>",
+      "projects": [
+        "bass12",
+        "mid10",
+        "horns",
+        "xo",
+        "lm3886",
+        "aleph",
+        "headbanger",
+        "jfet",
+        "ciuffoli",
+        "digital",
+        "room",
+        "bench",
+        "scope"
+      ],
+      "role": "project-specific BOM starter and browser-local pre-flight checklist"
+    },
+    {
+      "template": "stock_manager.html?project=<project-title>",
+      "projects": [
+        "bass12",
+        "mid10",
+        "horns",
+        "xo",
+        "lm3886",
+        "aleph",
+        "headbanger",
+        "jfet",
+        "ciuffoli",
+        "digital",
+        "room",
+        "bench",
+        "scope"
+      ],
+      "role": "existing inventory filter/search entry; does not create or alter stock rows"
+    }
+  ],
+  "project_sources": [
+    {
+      "id": "CIUFFOLI-PF-2019",
+      "project": "ciuffoli",
+      "title": "The Power Follower — SE class A amplifier after 22 years a new test (E180F release)",
+      "author": "Andrea Ciuffoli",
+      "url": "https://www.audiodesignguide.com/PowerFollower/index2.html",
+      "role": "primary source BOM, source-author measurements and feasibility reference; not an approved RIOT build"
+    }
+  ],
+  "sitemap": "https://riot-electric-ballroom-archive.aquadove2.chatgpt.site/sitemap.xml",
+  "access_note": "Owner-only custom access policy confirmed 2026-10-16. Archive is under development and is not a publicly discoverable website; noindex is not access control.",
+  "knowledge": [
+    {
+      "id": "KN-001",
+      "title": "Audio amplifier testing with a digital oscilloscope",
+      "html": "knowledge.html",
+      "revision": 1,
+      "updated_on": "2026-10-16",
+      "primary_source": "https://www.r-type.org/articles/art-125.htm",
+      "status": "REFERENCE — PROPOSED TEST PROCEDURE; NO RIOT MEASUREMENTS",
+      "baseline_change": false
+    }
+  ]
+}

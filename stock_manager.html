@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Gestione Stock – Stefano</title>
+<style>
+  body { font-family: system-ui, sans-serif; background:radial-gradient(circle at 85% -5%,#293f43 0,#111315 38rem); color:#edf1f2; margin:0; padding:28px; }
+  .wrap { max-width:1500px; margin:auto; }
+  .back { color:#65d5dc; text-decoration:none; font-size:.82rem; letter-spacing:.08em; text-transform:uppercase; }
+  h1 { margin-bottom:0.2rem; }
+  .filters, .actions { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:10px; }
+  input, select, button { padding:7px 10px; font-size:0.9rem; background:#20262a; color:#eee; border:1px solid #344047; border-radius:6px; }
+  table { width:100%; border-collapse:collapse; margin-top:10px; font-size:0.85rem; }
+  th, td { border:1px solid #444; padding:4px 6px; }
+  th { background:#202b2f; cursor:pointer; position:sticky; top:0; z-index:1; }
+  tr:nth-child(even) { background:#181818; }
+  tr:nth-child(odd) { background:#121212; }
+  .low { background:#4a1f1f !important; }
+  .summary { margin-top:8px; font-size:0.85rem; }
+  .query-note { color:#f4b35f; }
+  .small { width:70px; }
+</style>
+</head>
+<body><div class="wrap"><a class="back" href="index.html">← RIOT archive</a>
+
+<h1>Gestione Stock – Stefano</h1>
+<p>Inventario interattivo con import/export JSON, decremento, riordino, bin e progetto associato.</p>
+
+<div class="actions">
+  <button onclick="importJSON()">📥 Importa JSON</button>
+  <button onclick="exportJSON()">📤 Esporta JSON</button>
+  <button onclick="resetDB()">🗑 Reset Database</button>
+</div>
+
+<div class="filters">
+  <label>Ricerca: <input type="text" id="search"></label>
+  <label>Categoria: <select id="catFilter"><option value="">(tutte)</option></select></label>
+  <label>SubCat: <select id="subFilter"><option value="">(tutte)</option></select></label>
+  <label>Package: <select id="pkgFilter"><option value="">(tutti)</option></select></label>
+  <label>Bin: <select id="binFilter"><option value="">(tutti)</option></select></label>
+  <label>Project: <select id="projFilter"><option value="">(tutti)</option></select></label>
+</div>
+
+<div class="summary" id="summary"></div>
+
+<table id="tbl">
+<thead>
+<tr>
+  <th data-k="Item">Item</th>
+  <th data-k="Quantity">Qty</th>
+  <th data-k="Reorder">Reorder</th>
+  <th data-k="Bin">Bin</th>
+  <th data-k="Project">Project</th>
+  <th data-k="Code">Code</th>
+  <th data-k="Price">€</th>
+  <th data-k="Notes">Notes</th>
+  <th data-k="Category">Cat</th>
+  <th data-k="SubCategory">Sub</th>
+  <th data-k="Package">Pkg</th>
+  <th data-k="Voltage">V</th>
+  <th data-k="Capacitance">Cap</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+
+<script>
+/* -------------------------
+   1) CARICAMENTO DATABASE
+--------------------------*/
+let data = JSON.parse(localStorage.getItem("stockData")) || [];
+
+/* -------------------------
+   2) SALVATAGGIO
+--------------------------*/
+function save() {
+  localStorage.setItem("stockData", JSON.stringify(data));
+}
+
+/* -------------------------
+   3) IMPORT JSON
+--------------------------*/
+function importJSON() {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = ".json,.txt";
+  input.onchange = e => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = evt => {
+      try {
+        data = JSON.parse(evt.target.result);
+        save();
+        fillFilters();
+        render();
+        alert("Import completato!");
+      } catch (err) {
+        alert("Errore nel file JSON.");
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+/* -------------------------
+   4) EXPORT JSON
+--------------------------*/
+function exportJSON() {
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "stock_export.json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* -------------------------
+   5) RESET DATABASE
+--------------------------*/
+function resetDB() {
+  if (!confirm("Sei sicuro di voler cancellare tutto lo stock?")) return;
+  data = [];
+  save();
+  render();
+}
+
+/* -------------------------
+   6) POPOLAMENTO FILTRI
+--------------------------*/
+function fillFilters() {
+  const cat = document.getElementById("catFilter");
+  const sub = document.getElementById("subFilter");
+  const pkg = document.getElementById("pkgFilter");
+  const bin = document.getElementById("binFilter");
+  const proj = document.getElementById("projFilter");
+
+  cat.innerHTML = '<option value="">(tutte)</option>';
+  sub.innerHTML = '<option value="">(tutte)</option>';
+  pkg.innerHTML = '<option value="">(tutti)</option>';
+  bin.innerHTML = '<option value="">(tutti)</option>';
+  proj.innerHTML = '<option value="">(tutti)</option>';
+
+  const uc = k => [...new Set(data.map(x => x[k]).filter(Boolean))].sort();
+
+  for (let v of uc("Category")) cat.innerHTML += `<option>${v}</option>`;
+  for (let v of uc("SubCategory")) sub.innerHTML += `<option>${v}</option>`;
+  for (let v of uc("Package")) pkg.innerHTML += `<option>${v}</option>`;
+  for (let v of uc("Bin")) bin.innerHTML += `<option>${v}</option>`;
+  for (let v of uc("Project")) proj.innerHTML += `<option>${v}</option>`;
+}
+
+/* -------------------------
+   7) RENDER TABELLA
+--------------------------*/
+let sortKey = null, sortDir = 1;
+
+function render() {
+  const txt = document.getElementById("search").value.toLowerCase();
+  const fc = document.getElementById("catFilter").value;
+  const fs = document.getElementById("subFilter").value;
+  const fp = document.getElementById("pkgFilter").value;
+  const fb = document.getElementById("binFilter").value;
+  const fj = document.getElementById("projFilter").value;
+
+  let rows = data.filter(d =>
+    (!txt || JSON.stringify(d).toLowerCase().includes(txt)) &&
+    (!fc || d.Category === fc) &&
+    (!fs || d.SubCategory === fs) &&
+    (!fp || d.Package === fp) &&
+    (!fb || d.Bin === fb) &&
+    (!fj || d.Project === fj)
+  );
+
+  if (sortKey) {
+    rows.sort((a,b)=>{
+      let A=a[sortKey]||"", B=b[sortKey]||"";
+      if (!isNaN(A) && !isNaN(B)) return (A-B)*sortDir;
+      return String(A).localeCompare(String(B))*sortDir;
+    });
+  }
+
+  const tb = document.querySelector("#tbl tbody");
+  tb.innerHTML = "";
+
+  let totQty = 0, totVal = 0;
+
+  rows.forEach((d,i)=>{
+    totQty += Number(d.Quantity)||0;
+    totVal += (Number(d.Quantity)||0)*(Number(d.Price)||0);
+
+    const low = d.Reorder && d.Quantity <= d.Reorder;
+
+    tb.innerHTML += `
+      <tr class="${low ? 'low':''}">
+        <td>${d.Item}</td>
+        <td>
+          <button onclick="chg(${i},-1)">-</button>
+          ${d.Quantity}
+          <button onclick="chg(${i},1)">+</button>
+        </td>
+        <td>
+          <input class="small" type="number" value="${d.Reorder||0}"
+                 onchange="setReorder(${i},this.value)">
+        </td>
+        <td>
+          <input class="small" type="text" value="${d.Bin||''}"
+                 onchange="setBin(${i},this.value)">
+        </td>
+        <td>
+          <input class="small" type="text" value="${d.Project||''}"
+                 onchange="setProject(${i},this.value)">
+        </td>
+        <td>${d.Code}</td>
+        <td>${d.Price}</td>
+        <td>${d.Notes}</td>
+        <td>${d.Category}</td>
+        <td>${d.SubCategory}</td>
+        <td>${d.Package}</td>
+        <td>${d.Voltage}</td>
+        <td>${d.Capacitance}</td>
+      </tr>
+    `;
+  });
+
+  document.getElementById("summary").textContent =
+    `Visibili: ${rows.length} | Qty totali: ${totQty} | Valore stimato: €${totVal.toFixed(2)}${projectQueryNotice ? ' · ' + projectQueryNotice : ''}`;
+}
+
+/* -------------------------
+   8) FUNZIONI STOCK
+--------------------------*/
+function chg(i,delta){
+  data[i].Quantity = Math.max(0, Number(data[i].Quantity)+delta);
+  save();
+  render();
+}
+
+function setReorder(i,val){
+  data[i].Reorder = Number(val)||0;
+  save();
+  render();
+}
+
+function setBin(i,val){
+  data[i].Bin = val;
+  save();
+  fillFilters();
+  render();
+}
+
+function setProject(i,val){
+  data[i].Project = val;
+  save();
+  fillFilters();
+  render();
+}
+
+/* -------------------------
+   9) EVENTI
+--------------------------*/
+document.querySelectorAll("#tbl thead th").forEach(th=>{
+  th.onclick = ()=>{
+    const k = th.dataset.k;
+    if (!k) return;
+    if (sortKey === k) sortDir = -sortDir;
+    else { sortKey = k; sortDir = 1; }
+    render();
+  };
+});
+
+document.getElementById("search").oninput = render;
+document.getElementById("catFilter").onchange = render;
+document.getElementById("subFilter").onchange = render;
+document.getElementById("pkgFilter").onchange = render;
+document.getElementById("binFilter").onchange = render;
+document.getElementById("projFilter").onchange = render;
+
+/* -------------------------
+   INIT
+--------------------------*/
+fillFilters();
+const requestedProject = new URLSearchParams(location.search).get("project");
+let projectQueryNotice = "";
+if (requestedProject) {
+  const projectOptions = [...document.getElementById("projFilter").options].filter(o => o.value);
+  const norm = value => value.trim().toLowerCase();
+  const exactMatch = projectOptions.find(o => norm(o.value) === norm(requestedProject));
+  const partialMatch = exactMatch || projectOptions.find(o => {
+    const option = norm(o.value), requested = norm(requestedProject);
+    return Math.min(option.length, requested.length) >= 4 && (option.includes(requested) || requested.includes(option));
+  });
+  const match = partialMatch;
+  if (match) {
+    document.getElementById("projFilter").value = match.value;
+    projectQueryNotice = `Filtro progetto: ${match.value}${exactMatch ? '' : ' (etichetta parziale)'}`;
+  } else {
+    document.getElementById("search").value = requestedProject;
+    projectQueryNotice = `Nessun progetto stock con etichetta esatta “${requestedProject}”; ricerca testuale applicata. Verificare le righe e i tag progetto.`;
+  }
+}
+render();
+</script>
+
+</div></body>
+</html>

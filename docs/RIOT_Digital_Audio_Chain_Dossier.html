@@ -1,0 +1,67 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="index,follow"><link rel="canonical" href="https://riot-electric-ballroom-archive.aquadove2.chatgpt.site/docs/RIOT_Digital_Audio_Chain_Dossier.html"><title>RIOT Digital Audio Chain Dossier / RIOT Archive</title><style>body{margin:0;background:#111315;color:#edf1f2;font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}.wrap{max-width:1100px;margin:auto;padding:24px 22px 64px}a{color:#65d5dc}nav{font-size:.9rem;border-bottom:1px solid #344047;padding:0 0 14px;margin-bottom:22px}header{border-bottom:1px solid #344047;padding-bottom:18px;margin-bottom:24px}.eyebrow{color:#65d5dc;font-size:.75rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase}h1{font-size:clamp(2rem,5vw,3.6rem);line-height:1.05;letter-spacing:-.04em;margin:.3em 0}.source{color:#9aa7ad}article{overflow-wrap:anywhere}article h1,article h2,article h3,article h4{line-height:1.25;margin-top:1.8em}article h1{font-size:2rem}article h2{color:#65d5dc;font-size:1.35rem}article table{border-collapse:collapse;width:100%;display:block;overflow-x:auto;margin:18px 0;font-size:.9rem}article th,article td{border:1px solid #455159;padding:9px;text-align:left;vertical-align:top}article th{background:#26343d}article img{max-width:100%;height:auto}article pre{overflow:auto;background:#0e1112;padding:12px;border-radius:8px}article blockquote{border-left:3px solid #65d5dc;margin-left:0;padding-left:16px;color:#bdc7ca}@media(max-width:600px){.wrap{padding:16px 13px 40px}}</style></head><body><main class="wrap"><nav><a href="../index.html">RIOT archive</a> · <a href="../project.html?id=digital">Project record</a> · <a href="RIOT_Digital_Audio_Chain_Dossier.docx" download>Download original DOCX</a></nav><header><div class="eyebrow">RIOT Electric Ballroom / source document HTML</div><h1>RIOT Digital Audio Chain Dossier</h1><p class="source">Full text converted from the archived DOCX. This static HTML response includes the document content without client-side rendering.</p></header><article><p><em>Debian, Amanero, PipeWire, MPD, CamillaDSP and measurement source</em></p>
+<p>This dossier records the signal path that must accompany every electrical or acoustic measurement. A REW plot without source-chain metadata is not a reproducible engineering record.</p>
+<h1 id="current-signal-architecture">Current signal architecture</h1>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Source</strong></th>
+<th><strong>Path</strong></th>
+<th><strong>Destination</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>MPD/Cantata</td>
+<td>MPD -&gt; ALSA Loopback -&gt; CamillaDSP capture -&gt; Amanero</td>
+<td>Amanero Combo384 DAC</td>
+</tr>
+<tr class="even">
+<td>Firefox/Qobuz</td>
+<td>Firefox -&gt; PipeWire loopback/default sink -&gt; CamillaDSP -&gt; Amanero</td>
+<td>Amanero Combo384 DAC</td>
+</tr>
+<tr class="odd">
+<td>Measurement source</td>
+<td>Future HANMATEK DOS1102S generator or controlled test source</td>
+<td>Scope and circuit under test</td>
+</tr>
+</tbody>
+</table>
+<h1 id="host-and-device-record">Host and device record</h1>
+<ul>
+<li><p>Host: Debian desktop named cameraHTPC.</p></li>
+<li><p>Audio stack: PipeWire 0.3.65 with WirePlumber.</p></li>
+<li><p>DAC: Amanero Combo384, ALSA card Amanero, device 0.</p></li>
+<li><p>CamillaDSP version recorded as 4.1.3.</p></li>
+<li><p>CamillaGUI backend runs on localhost:5005.</p></li>
+<li><p>UMIK-1 is the REW microphone and is recognised as U18db.</p></li>
+</ul>
+<h1 id="configuration-decisions">Configuration decisions</h1>
+<ul>
+<li><p>Use one CamillaDSP path for both MPD and browser playback.</p></li>
+<li><p>EasyEffects was removed because it created a redundant processing path.</p></li>
+<li><p>Keep the digital chain documented separately from the room and speaker records, but attach its exact configuration to every measurement that depends on source level or filtering.</p></li>
+</ul>
+<h1 id="troubleshooting-history">Troubleshooting history</h1>
+<ul>
+<li><p>A DAC USB glitch was resolved during RIOT system development.</p></li>
+<li><p>A left-channel hiss was previously suspected to originate in the DAC path.</p></li>
+<li><p>PipeWire/WirePlumber can lose ALSA sinks if CamillaDSP and MPD start before the audio services. Recovery sequence: stop MPD and CamillaDSP, restart PipeWire, pipewire-pulse and WirePlumber, confirm the Loopback sink, then start CamillaDSP and MPD.</p></li>
+<li><p>Relevant services: camilladsp.service, mpd.service and camillagui.service.</p></li>
+</ul>
+<h1 id="level-references">Level references</h1>
+<ul>
+<li><p>Earlier system work used approximately 2.5 Vrms DAC output as the reference, with approximately 1.9-2.0 Vrms after crossover filtering.</p></li>
+<li><p>A later DAC/output investigation reported approximately 1.4 Vrms and remains one reason for scope-assisted tracing.</p></li>
+<li><p>Every future measurement record must state the level at the source and the level after the crossover.</p></li>
+</ul>
+<h1 id="where-to-resume">Where to resume</h1>
+<p>Export and archive the current CamillaDSP configuration, then use the new scope and generator to verify the source level at 100 Hz, 1 kHz and 10 kHz before diagnosing the JFET cascode or any amplifier.</p>
+<h1 id="evidence-status">Evidence status</h1>
+<p>The routing architecture and troubleshooting sequence are recoverable from prior project work. Exact current YAML configuration, final PipeWire profiles and latest measured DAC levels remain to be attached as source files.</p>
+</article></main></body></html>

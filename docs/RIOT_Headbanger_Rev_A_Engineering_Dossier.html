@@ -1,0 +1,205 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="index,follow"><link rel="canonical" href="https://riot-electric-ballroom-archive.aquadove2.chatgpt.site/docs/RIOT_Headbanger_Rev_A_Engineering_Dossier.html"><title>RIOT Headbanger Rev A Engineering Dossier / RIOT Archive</title><style>body{margin:0;background:#111315;color:#edf1f2;font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}.wrap{max-width:1100px;margin:auto;padding:24px 22px 64px}a{color:#65d5dc}nav{font-size:.9rem;border-bottom:1px solid #344047;padding:0 0 14px;margin-bottom:22px}header{border-bottom:1px solid #344047;padding-bottom:18px;margin-bottom:24px}.eyebrow{color:#65d5dc;font-size:.75rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase}h1{font-size:clamp(2rem,5vw,3.6rem);line-height:1.05;letter-spacing:-.04em;margin:.3em 0}.source{color:#9aa7ad}article{overflow-wrap:anywhere}article h1,article h2,article h3,article h4{line-height:1.25;margin-top:1.8em}article h1{font-size:2rem}article h2{color:#65d5dc;font-size:1.35rem}article table{border-collapse:collapse;width:100%;display:block;overflow-x:auto;margin:18px 0;font-size:.9rem}article th,article td{border:1px solid #455159;padding:9px;text-align:left;vertical-align:top}article th{background:#26343d}article img{max-width:100%;height:auto}article pre{overflow:auto;background:#0e1112;padding:12px;border-radius:8px}article blockquote{border-left:3px solid #65d5dc;margin-left:0;padding-left:16px;color:#bdc7ca}@media(max-width:600px){.wrap{padding:16px 13px 40px}}</style></head><body><main class="wrap"><nav><a href="../index.html">RIOT archive</a> · <a href="../project.html?id=headbanger">Project record</a> · <a href="RIOT_Headbanger_Rev_A_Engineering_Dossier.docx" download>Download original DOCX</a></nav><header><div class="eyebrow">RIOT Electric Ballroom / source document HTML</div><h1>RIOT Headbanger Rev A Engineering Dossier</h1><p class="source">Full text converted from the archived DOCX. This static HTML response includes the document content without client-side rendering.</p></header><article><p><em>Mono Class A headphone amplifier and preamplifier</em></p>
+<p>This dossier records the current Rev A design, the evidence supplied with the KiCad engineering-review package, the remaining release blockers and the exact sequence for prototype bring-up. The board is routed and electrically checked, but it is not yet released for fabrication or headphone use.</p>
+<h1 id="release-status">Release status</h1>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Gate</strong></th>
+<th><strong>Status</strong></th>
+<th><strong>Evidence or next action</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Schematic ERC</td>
+<td>Pass</td>
+<td>0 violations in KiCad 10.0.1.</td>
+</tr>
+<tr class="even">
+<td>PCB DRC</td>
+<td>Pass</td>
+<td>0 violations and 0 unconnected items.</td>
+</tr>
+<tr class="odd">
+<td>Schematic to PCB parity</td>
+<td>Pass</td>
+<td>0 electrical differences; 115 classified non-electrical warnings.</td>
+</tr>
+<tr class="even">
+<td>Real-device DC validation</td>
+<td>Open</td>
+<td>Verify pinouts, JFET current and all bias nodes on the assembled board.</td>
+</tr>
+<tr class="odd">
+<td>Thermal soak</td>
+<td>Open</td>
+<td>60-minute test at +/-15 V; confirm bias settles and temperatures remain safe.</td>
+</tr>
+<tr class="even">
+<td>Protection validation</td>
+<td>Open</td>
+<td>Measure relay delay, DC trip and rail-loss response with real parts.</td>
+</tr>
+<tr class="odd">
+<td>Load and stability test</td>
+<td>Open</td>
+<td>Oscilloscope test into 16 ohm non-inductive dummy load before headphones.</td>
+</tr>
+<tr class="even">
+<td>Fabrication release</td>
+<td>Blocked</td>
+<td>Release only after all staged prototype tests pass and are logged.</td>
+</tr>
+</tbody>
+</table>
+<h1 id="architecture">Architecture</h1>
+<ul>
+<li><p>J5 unbalanced input.</p></li>
+<li><p>U310 and LSK170 all-JFET cascoded source follower.</p></li>
+<li><p>C49/R38 AC coupling into the complementary EF2 stage.</p></li>
+<li><p>KSC1845 and KSA992 drivers, BD139 VBE multiplier, KSC2690A/KSA1220A output pair.</p></li>
+<li><p>Two series 4700 uF output capacitors with DC midpoint bias.</p></li>
+<li><p>DC and rail-fault sensing with delayed 24 V Omron relay output.</p></li>
+<li><p>On-board 18-0-18 VAC rectification, CRC filtering and LM317/LM337 +/-15 V regulation.</p></li>
+</ul>
+<h1 id="electrical-targets-and-calculated-performance">Electrical targets and calculated performance</h1>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Parameter</strong></th>
+<th><strong>Current documented value</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Supply rails</td>
+<td>+15 V and -15 V regulated</td>
+</tr>
+<tr class="even">
+<td>Loaded voltage gain</td>
+<td>Approximately 0.89 V/V</td>
+</tr>
+<tr class="odd">
+<td>Input reference used in model</td>
+<td>2.5 Vrms at 1 kHz</td>
+</tr>
+<tr class="even">
+<td>Modelled output</td>
+<td>2.224 Vrms at J1</td>
+</tr>
+<tr class="odd">
+<td>Modelled power into 16 ohm</td>
+<td>0.309 W</td>
+</tr>
+<tr class="even">
+<td>Modelled load current</td>
+<td>139 mArms, 197 mA peak</td>
+</tr>
+<tr class="odd">
+<td>Output coupling</td>
+<td>Two 4700 uF capacitors in series; approximately 2350 uF effective</td>
+</tr>
+<tr class="even">
+<td>Output capacitor corner</td>
+<td>Approximately 4.23 Hz into 16 ohm</td>
+</tr>
+<tr class="odd">
+<td>EF2 idle-current target</td>
+<td>Approximately 75 mA; acceptance 65-85 mA after warm-up</td>
+</tr>
+<tr class="even">
+<td>Emitter resistor adjustment</td>
+<td>35.25 mV across each 0.47 ohm resistor</td>
+</tr>
+<tr class="odd">
+<td>CAPMID target</td>
+<td>-9.5 V to -11.5 V before headphones</td>
+</tr>
+</tbody>
+</table>
+<h1 id="jfet-front-end">JFET front end</h1>
+<p>Q6/Q8 are U310 cascode devices and Q7/Q9 are LSK170 devices. The selected current is device-specific rather than a single assumed value.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Device basis</strong></th>
+<th><strong>FE current target</strong></th>
+<th><strong>Modelled FE output</strong></th>
+<th><strong>Modelled FE THD</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Idss 3.35 mA, Vp 0.31 V</td>
+<td>1.45 mA</td>
+<td>2.480 Vrms</td>
+<td>0.0205%</td>
+</tr>
+<tr class="even">
+<td>Idss 5.5 mA, Vp 0.41 V</td>
+<td>2.30 mA</td>
+<td>2.483 Vrms</td>
+<td>0.0105%</td>
+</tr>
+</tbody>
+</table>
+<p>Set and verify current by measuring TP2-TP1 across R35, where 14.5 mV corresponds to 1.45 mA and 23.0 mV corresponds to 2.30 mA. These are generic-model calculations, not a substitute for measurements on the purchased devices.</p>
+<h1 id="thermal-and-mechanical-requirements">Thermal and mechanical requirements</h1>
+<ul>
+<li><p>Q3, Q5 and Q4 require close thermal contact on one shared, electrically insulated heatsink rated at 5 K/W or lower.</p></li>
+<li><p>Q3 and Q4 tabs must be electrically isolated from the heatsink and from one another as required by their node potentials.</p></li>
+<li><p>U3 and U4 require separate heatsinks; their tabs are at different electrical potentials.</p></li>
+<li><p>The enclosure still requires a safe mains inlet, primary fuse, switch, protective earth and transformer mounting.</p></li>
+<li><p>The circuit has no output short-circuit or over-current limiter. Do not hot-plug a connector that can short the output.</p></li>
+</ul>
+<h1 id="bring-up-procedure">Bring-up procedure</h1>
+<ol type="1">
+<li><p>Verify the actual lead order and authenticity of U310, LSK170, KSC1845, KSA992, KSC2690A, KSA1220A and BD139.</p></li>
+<li><p>Populate rectifiers, CRC network and regulators only. Use fused primary wiring and a current-limited AC source.</p></li>
+<li><p>Set the regulators to +15.00 V and -15.00 V. Accept +/-0.10 V and less than 100 mV rail imbalance.</p></li>
+<li><p>Load each rail at 120 mA for 30 minutes. Confirm regulation, temperature and absence of thermal shutdown.</p></li>
+<li><p>Populate the JFET front end. Set the selected current and log source, drain, cascode-drain and BUF_OUT voltages.</p></li>
+<li><p>Populate the EF2 without K1 or headphones. Start from a current-limited +/-5 V bench supply and increase in steps.</p></li>
+<li><p>Set 35.25 mV across R11 and R12. The readings must agree within 5 mV.</p></li>
+<li><p>Thermal-soak for 60 minutes at +/-15 V. Confirm 65-85 mA settled idle current, AMP_OUT within +/-100 mV and cases below 80 C.</p></li>
+<li><p>Confirm CAPMID is -9.5 V to -11.5 V and J1 is below 10 mV DC after relay closure.</p></li>
+<li><p>Test relay timing and DC protection with a dummy load, including +/-1 V forced faults and loss of either rail.</p></li>
+<li><p>Use a 16 ohm, 5 W non-inductive dummy load and oscilloscope before any headphone connection.</p></li>
+<li><p>Use a disposable 32 ohm headphone pair for the first listening test; the 15/16 ohm Ananda comes last.</p></li>
+</ol>
+<h1 id="validation-evidence-in-the-supplied-package">Validation evidence in the supplied package</h1>
+<ul>
+<li><p>design/ contains the active KiCad project, schematic sheets, PCB and project settings.</p></li>
+<li><p>source_snapshot/ contains the recovered baseline before the final routing pass.</p></li>
+<li><p>validation/ contains ERC, DRC, parity, BOM, connections, critical parts, board statistics, renders and generic simulation results.</p></li>
+<li><p>The package includes a NOT RELEASED fabrication-review archive; it must remain treated as a review artifact, not a manufacturing release.</p></li>
+</ul>
+<h1 id="known-risks-and-unresolved-questions">Known risks and unresolved questions</h1>
+<ul>
+<li><p>Real-device pinouts, authenticity and semiconductor spread are not yet verified.</p></li>
+<li><p>Generic transistor models do not establish distortion, stability or safe thermal behaviour.</p></li>
+<li><p>Oscilloscope stability with a 15/16 ohm load and reactive headphone cable has not been tested.</p></li>
+<li><p>Relay timing, trip threshold and rail-loss behaviour remain simulation-only until measured on the assembled board.</p></li>
+<li><p>Shared output-heatsink mechanics and electrical insulation remain enclosure-level work.</p></li>
+<li><p>The 115 parity warnings are classified as non-electrical, but the classification should be retained with the package.</p></li>
+</ul>
+<h1 id="where-to-resume">Where to resume</h1>
+<p>Do not reroute Rev A unless a genuine defect is found. The next engineering action is controlled prototype bring-up, beginning with regulator-only testing and real-device pinout verification. Append measured values to this dossier after each gate; do not rely on memory or chat history.</p>
+<h1 id="revision-note">Revision note</h1>
+<p>This dossier is based on RIOT_HEADBANGER_REV_A_ENGINEERING_REVIEW.zip supplied on 15 October 2026. It supersedes older Headbanger notes where they conflict with the current Rev A engineering review, especially the output-stage idle-current target.</p>
+</article></main></body></html>
