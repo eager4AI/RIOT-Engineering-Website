@@ -16,7 +16,7 @@ This repository is the durable working context for the RIOT home-audio engineeri
 - LOW: 12 inch bass systems, approximately 40-300 Hz, LM3886 monoblocks.
 - MID: SB Audience Bianco 10MW150, approximately 300 Hz-1.8/1.9 kHz.
 - HIGH: SB Audience CD44-PK compression drivers on custom horns, above approximately 1.9 kHz.
-- Active crossover: two Pass 6-24 boards, one complete board per stereo channel, 300 Hz and 1.9 kHz split points.
+- Latest Pass 6-24 calculation (Revision 4): approximately 250 Hz lower and 1.9 kHz upper. Revision 3 reports the earlier physical build at approximately 300 Hz; whether the boards were changed to the latest calculation is unverified.
 - Digital path: Debian cameraHTPC, Amanero Combo384, PipeWire, MPD/Firefox and CamillaDSP.
 
 ## Current priorities
@@ -61,13 +61,13 @@ Primary reference: Andrea Ciuffoli, PF2019 / E180F release, https://www.audiodes
 
 The owner requested controlled AI collaboration without public launch. The Site access policy is custom and currently owner-only. Do not describe it as public or make the archive publicly discoverable. `noindex`/robots directives are not access control; the platform access policy is the boundary.
 
-## PassXO Candidate 250-A — 16 October 2026
+## PassXO 250 Hz calculation — Revision 4, 21 October 2026
 
-Historical simulation proposal only: approximately 250 Hz lower crossover, 24 dB/octave per branch, screenshot-derived intersection near −6 dB per branch and near-flat ideal electrical sum. This was neither measured hardware nor the later accepted as-built split; retain the candidate values and simulation screenshot in the build dossier as an experiment.
+The owner identifies the approximately 250 Hz lower-crossover calculation and its C/R settings screenshot as the latest design revision. The PassXO screenshot and table are preserved in the public build dossier. This supersedes the earlier 300 Hz value as the current calculated lower target; it does not establish installation, electrical response or acoustic summation. Revision 3 retains the 16 October owner-reported physical build at approximately 300 Hz as historical as-built evidence pending confirmation of any hardware change.
 
-## Pass BIAMP 6-24 as-built update — 16 October 2026
+## Pass BIAMP 6-24 Revision 3 as-built update — 16 October 2026
 
-Revision 3 records owner confirmation that two Pass 6-24 boards are assembled and installed, one per speaker, with LOW/MID/HIGH outputs per board. Architecture: L LOW ≈300 Hz LP; L HIGH ≈300 Hz HP handed internally to R LOW ≈1.9 kHz LP for MID; independent full-range R HIGH ≈1.9 kHz HP. L HIGH 10 µF, 100 Ω (100R) and 47 kΩ external output components are omitted; R LOW input/preamplifier-buffer section is omitted; jumper termination is owner-confirmed at the annotated T4-side BIAS pad. The schematic identifies the intended node, but actual copper continuity, DC/bias, loaded response and board-to-board matching still require measurement. The supplied updated HTML contains simulation/source drawings, not assembled-board photographs. Candidate 250-A remains simulation-only and is not the as-built setting.
+Revision 3 records owner confirmation that two Pass 6-24 boards are assembled and installed, one per speaker, with LOW/MID/HIGH outputs per board. Architecture: L LOW ≈300 Hz LP; L HIGH ≈300 Hz HP handed internally to R LOW ≈1.9 kHz LP for MID; independent full-range R HIGH ≈1.9 kHz HP. L HIGH 10 µF, 100 Ω (100R) and 47 kΩ external output components are omitted; R LOW input/preamplifier-buffer section is omitted; jumper termination is owner-confirmed at the annotated T4-side BIAS pad. The schematic identifies the intended node, but actual copper continuity, DC/bias, loaded response and board-to-board matching still require measurement. The supplied updated HTML contains simulation/source drawings, not assembled-board photographs. Revision 4 (21 October) makes approximately 250 Hz the latest calculated lower target; actual board population and electrical validation against that calculation remain unverified.
 
 ## Knowledge — 16 October 2026
 

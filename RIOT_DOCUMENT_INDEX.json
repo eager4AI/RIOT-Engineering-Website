@@ -67,12 +67,12 @@
         "digital",
         "room"
       ],
-      "role": "Pass BIAMP 6-24 three-way crossover as-built dossier; owner-confirmed physical implementation, electrical validation pending",
+      "role": "Engineering journal; Revision 4 latest ≈250 Hz lower-crossover calculation with C/R screenshot; Revision 3 as-built history retained",
       "html": "docs/Pass_BIAMP_6-24_Three_Way_Build.html",
-      "revision": 3,
-      "updated_on": "2026-10-16",
-      "evidence_status": "AS-BUILT — OWNER CONFIRMED / ELECTRICAL VALIDATION PENDING",
-      "note": "Two assembled/installed boards reported by owner. Construction photos absent from supplied updated HTML; T4 copper-net continuity and electrical measurements remain open. Candidate 250-A is simulation-only, not as-built."
+      "revision": 4,
+      "updated_on": "2026-10-21",
+      "evidence_status": "LATEST CALCULATED DESIGN TARGET ≈250 Hz / HARDWARE POPULATION AND RESPONSE UNVERIFIED",
+      "note": "Owner correction identifies the 250 Hz calculation and PassXO screenshot as the latest design revision. Rev. 3 records the earlier owner-reported ≈300 Hz physical build; whether it was changed to the latest calculated settings remains unverified."
     },
     {
       "file": "RIOT_Headbanger_Rev_A_Engineering_Dossier.docx",
@@ -99,10 +99,11 @@
       "projects": [
         "xo"
       ],
-      "role": "Engineering journal; Candidate 250-A and preserved 300 Hz baseline with schematic evidence",
-      "revision": 3,
-      "updated_on": "2026-10-16",
-      "evidence_status": "SCREENSHOT-DERIVED SIMULATION CANDIDATE; ASSEMBLY ONGOING; COMMISSIONING PENDING"
+      "role": "Engineering journal; Revision 4 latest ≈250 Hz lower-crossover calculation with C/R screenshot; Revision 3 as-built history retained",
+      "revision": 4,
+      "updated_on": "2026-10-21",
+      "evidence_status": "LATEST CALCULATED DESIGN TARGET ≈250 Hz / HARDWARE POPULATION AND RESPONSE UNVERIFIED",
+      "note": "Owner correction identifies the 250 Hz calculation and PassXO screenshot as the latest design revision. Rev. 3 records the earlier owner-reported ≈300 Hz physical build; whether it was changed to the latest calculated settings remains unverified."
     }
   ],
   "missing_source_evidence": [
