@@ -72,7 +72,10 @@
       "revision": 4,
       "updated_on": "2026-10-21",
       "evidence_status": "LATEST CALCULATED DESIGN TARGET ≈250 Hz / HARDWARE POPULATION AND RESPONSE UNVERIFIED",
-      "note": "Owner correction identifies the 250 Hz calculation and PassXO screenshot as the latest design revision. Rev. 3 records the earlier owner-reported ≈300 Hz physical build; whether it was changed to the latest calculated settings remains unverified."
+      "note": "Owner correction identifies the 250 Hz calculation and PassXO screenshot as the latest design revision. Rev. 3 records the earlier owner-reported ≈300 Hz physical build; whether it was changed to the latest calculated settings remains unverified. The owner-supplied C/R settings image received 21 October 2026 is preserved byte-for-byte as a companion; fitted values remain unverified.",
+      "supporting_assets": [
+        "docs/images/Pass_6-24_Crossover_C-R_Settings_20261021.png"
+      ]
     },
     {
       "file": "RIOT_Headbanger_Rev_A_Engineering_Dossier.docx",
@@ -103,7 +106,10 @@
       "revision": 4,
       "updated_on": "2026-10-21",
       "evidence_status": "LATEST CALCULATED DESIGN TARGET ≈250 Hz / HARDWARE POPULATION AND RESPONSE UNVERIFIED",
-      "note": "Owner correction identifies the 250 Hz calculation and PassXO screenshot as the latest design revision. Rev. 3 records the earlier owner-reported ≈300 Hz physical build; whether it was changed to the latest calculated settings remains unverified."
+      "note": "Owner correction identifies the 250 Hz calculation and PassXO screenshot as the latest design revision. Rev. 3 records the earlier owner-reported ≈300 Hz physical build; whether it was changed to the latest calculated settings remains unverified. The owner-supplied C/R settings image received 21 October 2026 is preserved byte-for-byte as a companion; fitted values remain unverified.",
+      "supporting_assets": [
+        "docs/images/Pass_6-24_Crossover_C-R_Settings_20261021.png"
+      ]
     }
   ],
   "missing_source_evidence": [

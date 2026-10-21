@@ -63,7 +63,7 @@ The owner requested controlled AI collaboration without public launch. The Site 
 
 ## PassXO 250 Hz calculation — Revision 4, 21 October 2026
 
-The owner identifies the approximately 250 Hz lower-crossover calculation and its C/R settings screenshot as the latest design revision. The PassXO screenshot and table are preserved in the public build dossier. This supersedes the earlier 300 Hz value as the current calculated lower target; it does not establish installation, electrical response or acoustic summation. Revision 3 retains the 16 October owner-reported physical build at approximately 300 Hz as historical as-built evidence pending confirmation of any hardware change.
+The owner identifies the approximately 250 Hz lower-crossover calculation and its C/R settings screenshot as the latest design revision. The PassXO screenshot and table are preserved in the public build dossier, along with the owner-supplied 21 October C/R settings diagram. The diagram is not proof of installed component values or measured response. This supersedes the earlier 300 Hz value as the current calculated lower target; it does not establish installation, electrical response or acoustic summation. Revision 3 retains the 16 October owner-reported physical build at approximately 300 Hz as historical as-built evidence pending confirmation of any hardware change.
 
 ## Pass BIAMP 6-24 Revision 3 as-built update — 16 October 2026
 
