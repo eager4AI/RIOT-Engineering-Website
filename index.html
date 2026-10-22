@@ -10,7 +10,7 @@
 </head>
 <body>
 <main class="shell">
-<header class="top"><div><div class="eyebrow">RIOT Electric Ballroom / engineering archive</div><h1 class="title">Build log, design record, next move.</h1><p class="lead">A browser-first index for the whole RIOT system. Search it, filter it, open only what you need, attach build photos and leave a handover note before walking away from the bench.</p></div><div class="stamp"><span class="eyebrow">Archive revision</span><b>16 Oct 2026</b><span class="meta">Headbanger Rev A is the evidence baseline</span></div></header>
+<header class="top"><div><div class="eyebrow">RIOT Electric Ballroom / engineering archive</div><h1 class="title">Build log, design record, next move.</h1><p class="lead">A browser-first index for the whole RIOT system. Search it, filter it, open only what you need, attach build photos and leave a handover note before walking away from the bench.</p></div><div class="stamp"><span class="eyebrow">Latest site update</span><b id="archive-revision-date" aria-live="polite">Loading…</b><span class="meta">Headbanger Rev A is the evidence baseline</span></div></header>
 <div class="layout"><aside class="side"><div class="sidebox"><h3>Jump to project</h3><nav class="nav" id="nav"></nav><a class="nav" href="crazy-ideas/index.html" style="display:block;margin-top:8px;border:1px solid var(--amber);color:var(--amber)">Crazy Ideas · CI-002 ↗</a><a class="nav" href="knowledge.html" style="display:block;margin-top:8px;border:1px solid var(--cyan);color:var(--cyan)">Knowledge · bench guides ↗</a><a class="nav" href="repository.html" style="display:block;margin-top:8px;border:1px solid var(--cyan);color:var(--cyan)">Open Project Repository ↗</a><a class="nav" href="stock_manager.html" style="display:block;margin-top:8px;border:1px solid var(--cyan);color:var(--cyan)">Open Stock Manager ↗</a><div class="legend"><div><i class="dot" style="background:var(--green)"></i>Operating / complete</div><div><i class="dot" style="background:var(--amber)"></i>Assembly priority</div><div><i class="dot" style="background:var(--blue)"></i>Open engineering gate</div><div><i class="dot" style="background:var(--red)"></i>Pending delivery or test</div></div></div></aside>
 <section><div style="background:linear-gradient(145deg,#1d2327,#15191b);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:16px;padding:17px;margin:0 0 18px"><h2 style="margin:0 0 10px;color:var(--cyan);font-size:.88rem;letter-spacing:.12em;text-transform:uppercase">Engineering dossiers · direct HTML</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px"><a style="color:var(--cyan)" href="docs/RIOT_Room_Acoustics_and_REW_Dossier.html">Room Acoustics &amp; REW</a><a style="color:var(--cyan)" href="docs/RIOT_Loudspeaker_Systems_Dossier.html">Loudspeaker Systems</a><a style="color:var(--cyan)" href="docs/RIOT_Digital_Audio_Chain_Dossier.html">Digital Audio Chain</a><a style="color:var(--cyan)" href="docs/Pass_BIAMP_6-24_Three_Way_Build.html">Pass 6-24 Crossover</a><a style="color:var(--cyan)" href="docs/RIOT_Headbanger_Rev_A_Engineering_Dossier.html">Headbanger Rev A</a><a style="color:var(--cyan)" href="docs/RIOT_Onken_Project_Chat_History_Evidence_Ledger.html">Project Evidence Ledger</a><a style="color:var(--cyan)" href="docs/RIOT_Electric_Ballroom_Project_Index.html">Master Project Index</a><a style="color:var(--cyan)" href="crazy-ideas/ci-002-6v6gt-ultralinear-pp-monoblocks.html">CI-002 6V6GT Research</a></div><p style="margin:10px 0 0;font-size:.82rem"><a href="docs/index.html">Browse all dossiers and supporting records ↗</a></p></div><div class="toolbar"><input class="search" id="search" placeholder="Search projects, parts, notes or next actions..."><button class="filter active" data-filter="all">All</button><button class="filter" data-filter="priority">Priority</button><button class="filter" data-filter="open">Open gates</button><button class="filter" data-filter="operating">Operating</button><button class="action" id="expand">Expand all</button><button class="action" id="export">Export notes</button></div><p class="summary" id="summary"></p><div class="grid" id="grid"></div><div class="foot">Local additions are stored in this browser. Use Export notes before changing computer or browser profile.</div></section></div>
 </main>
@@ -40,6 +40,30 @@ document.getElementById('search').oninput=render;document.querySelectorAll('.fil
 <script>
 function addProjectLinks(){document.querySelectorAll('.card').forEach(card=>{if(card.querySelector('.project-link'))return;const a=document.createElement('a');a.className='project-link';a.href='project.html?id='+encodeURIComponent(card.id);a.textContent='Open full project page ↗';a.style='display:inline-block;margin-top:14px;color:var(--cyan);text-decoration:none;border:1px solid var(--cyan);border-radius:9px;padding:8px 10px;font-size:.84rem';a.onclick=e=>e.stopPropagation();card.querySelector('.body').prepend(a)})}
 new MutationObserver(addProjectLinks).observe(document.getElementById('grid'),{childList:true});addProjectLinks();
+</script>
+<script>
+(async function updateLatestSiteCommit(){
+  const dateLabel = document.getElementById('archive-revision-date');
+  try {
+    const response = await fetch('https://api.github.com/repos/eager4AI/RIOT-Engineering-Website/commits?per_page=1', {
+      headers: { Accept: 'application/vnd.github+json' },
+      cache: 'no-store'
+    });
+    if (!response.ok) throw new Error('GitHub API request failed');
+    const [latest] = await response.json();
+    const timestamp = latest && latest.commit &&
+      (latest.commit.committer?.date || latest.commit.author?.date);
+    if (!timestamp) throw new Error('Latest commit date missing');
+    const date = new Date(timestamp);
+    if (Number.isNaN(date.getTime())) throw new Error('Latest commit date invalid');
+    dateLabel.textContent = new Intl.DateTimeFormat('en-GB', {
+      day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Europe/Rome'
+    }).format(date);
+    dateLabel.setAttribute('datetime', date.toISOString());
+  } catch {
+    dateLabel.textContent = 'Unavailable';
+  }
+})();
 </script>
 </body>
 </html>
