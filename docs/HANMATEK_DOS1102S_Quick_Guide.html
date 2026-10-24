@@ -1,27 +1,71 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="HANMATEK DOS1102S oscilloscope quick guide and bench testing references.">
-<title>HANMATEK DOS1102S Oscilloscope Guide | RIOT</title>
-<style>
-:root{color-scheme:dark;--bg:#111315;--panel:#1a1e21;--ink:#edf1f2;--muted:#a7b5bc;--line:#344047;--cyan:#65d5dc;--amber:#f4b35f}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 85% 0,#293f43,transparent 34rem),var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui,-apple-system,Segoe UI,sans-serif}
-main{max-width:900px;margin:auto;padding:30px 22px 56px}nav{border-bottom:1px solid var(--line);padding-bottom:14px}a{color:var(--cyan);text-underline-offset:4px}
-header{padding:48px 0 30px;border-bottom:1px solid var(--line)}.eyebrow{color:var(--cyan);font-size:.76rem;font-weight:750;letter-spacing:.16em;text-transform:uppercase}
-h1{font-size:clamp(2.2rem,6vw,4rem);line-height:1.04;letter-spacing:-.05em;margin:12px 0}.lead{max-width:700px;color:var(--muted);font-size:1.08rem}
-.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}.button{display:inline-block;border:1px solid var(--cyan);border-radius:8px;padding:10px 15px;text-decoration:none;font-weight:700}.button.primary{background:var(--cyan);color:#101719}
-section{margin-top:25px;padding:20px;background:var(--panel);border:1px solid var(--line);border-radius:12px}h2{margin-top:0;color:var(--cyan);font-size:1.1rem}.note{border-left:3px solid var(--amber);padding:12px 16px;background:#252321;color:#d7dfe2}footer{margin-top:30px;border-top:1px solid var(--line);padding-top:16px;color:var(--muted);font-size:.9rem}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="description" content="HANMATEK DOS1102S Digital Storage Oscilloscope Quick Guide, available as an in-page PDF and download.">
+  <title>HANMATEK DOS1102S Quick Guide / RIOT Archive</title>
+  <style>
+    :root{--bg:#111315;--panel:#1a1e21;--ink:#edf1f2;--muted:#a7b5bc;--line:#344047;--cyan:#65d5dc;--amber:#f4b35f}
+    *{box-sizing:border-box}
+    body{margin:0;background:radial-gradient(circle at 88% 0,#293f43,transparent 34rem),var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+    a{color:var(--cyan);text-underline-offset:4px}
+    a:focus-visible{outline:3px solid var(--amber);outline-offset:4px}
+    main{max-width:1120px;margin:auto;padding:26px 22px 54px}
+    nav{display:flex;flex-wrap:wrap;gap:10px 22px;border-bottom:1px solid var(--line);padding:0 0 16px;font-size:.9rem}
+    header{padding:38px 0 24px;border-bottom:1px solid var(--line)}
+    .eyebrow{color:var(--cyan);font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;font-weight:750}
+    h1{font-size:clamp(2.2rem,6vw,4.4rem);line-height:1.03;letter-spacing:-.05em;margin:12px 0}
+    .lead{color:#c0cdd3;font-size:1.08rem;max-width:760px;margin:0}
+    .meta{color:var(--muted);font-size:.9rem;margin:12px 0 0}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+    .button{display:inline-block;background:var(--cyan);color:#101719;text-decoration:none;font-weight:750;padding:10px 15px;border-radius:8px}
+    .button.secondary{background:transparent;color:var(--cyan);border:1px solid var(--line)}
+    .note{margin:20px 0;padding:14px 17px;border-left:3px solid var(--amber);background:#252321;color:#d7dfe2}
+    .viewer{margin-top:22px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#202629}
+    .viewer iframe{display:block;width:100%;height:min(86vh,1100px);min-height:650px;border:0;background:#fff}
+    .viewer-fallback{padding:18px}
+    footer{margin-top:24px;border-top:1px solid var(--line);padding-top:16px;color:var(--muted);font-size:.86rem}
+    @media(max-width:640px){main{padding:18px 14px 36px}.viewer iframe{height:74vh;min-height:480px}}
+  </style>
 </head>
-<body><main>
-<nav><a href="../index.html">RIOT Engineering website</a> · <a href="../knowledge.html">Bench knowledge</a></nav>
-<header><div class="eyebrow">Bench instrument reference · HANMATEK DOS1102S</div>
-<h1>Oscilloscope quick guide</h1>
-<p class="lead">The 28-page owner-provided quick guide is stored in the RIOT Engineering Archive. Open the archive copy to view or download the PDF.</p>
-<div class="actions"><a class="button primary" href="https://github.com/eager4AI/RIOT-Engineering-Archive/blob/main/dist/docs/HANMATEK_DOS1102S_Quick_Guide.pdf">Open / download the PDF guide</a><a class="button" href="https://github.com/eager4AI/RIOT-Engineering-Archive/blob/main/dist/docs/HANMATEK_DOS1102S_Quick_Guide.html">View the archive guide page</a></div>
-</header>
-<section><h2>RIOT bench use</h2><p>The DOS1102S is intended for waveform, clipping, gain, and oscillation checks. Begin with the instrument’s calibration output and verify probes before testing an amplifier. Use appropriate dummy loads for amplifier output tests.</p><p class="note"><strong>Access:</strong> the guide file is in the private Archive repository. Sign in to GitHub with an account that has access to <code>eager4AI/RIOT-Engineering-Archive</code> to open or download it.</p></section>
-<footer>Guide source: owner-supplied photographed pages. Check the ratings printed on the actual scope and probes before connecting them.</footer>
-</main></body></html>
+<body>
+  <main>
+    <nav aria-label="Archive navigation">
+      <a href="../index.html">RIOT archive</a>
+      <a href="../project.html?id=scope">Measurement bench</a>
+      <a href="../repository.html">Project repository</a>
+      <a href="../knowledge.html">KN-001 oscilloscope testing guide</a>
+    </nav>
+
+    <header>
+      <div class="eyebrow">Instrument reference / HANMATEK DOS1102S</div>
+      <h1>Digital Storage Oscilloscope Quick Guide</h1>
+      <p class="lead">The owner-provided quick-guide photographs, assembled into one PDF for bench use.</p>
+      <p class="meta">28 photographed pages · Image-based PDF · Added 22 October 2026</p>
+      <div class="actions">
+        <a class="button" href="https://github.com/eager4AI/RIOT-Engineering-Archive/blob/main/docs/HANMATEK_DOS1102S_Quick_Guide.pdf" download>Open private PDF (GitHub access required)</a>
+        <a class="button secondary" href="https://github.com/eager4AI/RIOT-Engineering-Archive/blob/main/docs/HANMATEK_DOS1102S_Quick_Guide.pdf" target="_blank" rel="noopener">Open PDF in a new tab</a>
+      </div>
+    </header>
+
+    <p class="note"><strong>Source note:</strong> This archive copy was assembled from 28 supplied page photographs. Coverage against the manufacturer’s complete manual and separate probe instructions has not been independently verified. Check the ratings printed on the actual oscilloscope and probes before making a connection.</p>
+
+    <section class="viewer" aria-label="HANMATEK DOS1102S Quick Guide PDF viewer">
+      <p class="viewer-fallback"><a href="https://github.com/eager4AI/RIOT-Engineering-Archive/blob/main/docs/HANMATEK_DOS1102S_Quick_Guide.pdf#view=FitH">Open the guide in the private Archive (GitHub access required)</a>.</p>
+    </section>
+
+    <section aria-labelledby="commissioning-20261024" style="margin-top:28px;border:1px solid #344047;border-radius:14px;padding:20px;background:#1a1e21">
+      <div style="color:#65d5dc;font-size:.76rem;font-weight:750;letter-spacing:.15em;text-transform:uppercase">Measured commissioning record · 24 October 2026</div>
+      <h2 id="commissioning-20261024">Basic functional check completed</h2>
+      <p>Both channels were checked using the instrument's internal generator and a direct BNC-to-BNC cable with a nominal 1 kHz sine. The cable contains no 10× probe: set channel attenuation to <strong>1×</strong>. A prior 10× channel setting caused approximately tenfold amplitude over-reporting.</p>
+      <div style="overflow-x:auto"><table style="border-collapse:collapse;width:100%;margin:16px 0"><thead><tr><th style="text-align:left;padding:9px;border:1px solid #455159">Reading</th><th style="text-align:left;padding:9px;border:1px solid #455159">CH1</th><th style="text-align:left;padding:9px;border:1px solid #455159">CH2</th></tr></thead><tbody><tr><td style="padding:9px;border:1px solid #455159">Frequency</td><td style="padding:9px;border:1px solid #455159">1.000 kHz</td><td style="padding:9px;border:1px solid #455159">1.000 kHz</td></tr><tr><td style="padding:9px;border:1px solid #455159">Peak-to-peak</td><td style="padding:9px;border:1px solid #455159">1.024 V</td><td style="padding:9px;border:1px solid #455159">1.024 V</td></tr><tr><td style="padding:9px;border:1px solid #455159">RMS</td><td style="padding:9px;border:1px solid #455159">356.1 mV</td><td style="padding:9px;border:1px solid #455159">354.3 mV</td></tr><tr><td style="padding:9px;border:1px solid #455159">Mean DC</td><td style="padding:9px;border:1px solid #455159">−4.874 mV</td><td style="padding:9px;border:1px solid #455159">+4.12 mV</td></tr><tr><td style="padding:9px;border:1px solid #455159">Channel setting</td><td style="padding:9px;border:1px solid #455159">1×</td><td style="padding:9px;border:1px solid #455159">1×</td></tr></tbody></table></div>
+      <p>CH1 extrema were reported as approximately +504 mV and −520 mV. Stable triggering and a clean trace without visible clipping were obtained after trigger, vertical-scale, and acquisition adjustments. Both channels passed this <strong>basic functional check</strong>; this is not formal calibration and does not establish bandwidth accuracy, noise floor, or distortion performance. No screenshot or raw capture was attached.</p>
+      <h3>Match attenuation to the connection</h3><ul><li>Direct BNC cable: channel attenuation 1×.</li><li>Physical 10× probe: channel attenuation 10×, with the probe switch and scope setting matched.</li><li>Before evaluating clipping, make waveform peaks visible and confirm automatic frequency and peak-to-peak readings against the trace.</li></ul>
+      <p><strong>Grounding gate:</strong> Treat the scope's probe ground clips as earth-referenced. The RIOT signal star is connected through an owner-confirmed resistor/capacitor ground-lift network to protective earth; a scope ground may create another path. The 24 October 11.3 Ω resistance reading is not a complete safety validation. Do not make a live DAC connection until the scope-grounding and USB/computer paths have been assessed. Do not disconnect scope protective earth.</p>
+      <p>Full dated record: <a href="https://github.com/eager4AI/RIOT-Engineering-Archive/blob/main/measurements/bench/RIOT_Bench_Evidence_Register.json">bench evidence register</a> · <a href="RIOT_Power_Supply_and_Grounding_Dossier.html">power and grounding dossier</a>.</p>
+    </section>    <footer>Companion reference: <a href="../knowledge.html">KN-001 · Audio amplifier testing with a digital oscilloscope</a>. The test procedure remains a reference; the dated basic functional check is recorded above and does not constitute formal calibration.</footer>
+  </main>
+</body>
+</html>
