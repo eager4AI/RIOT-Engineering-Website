@@ -1,21 +1,9 @@
 {
   "source_repository": "eager4AI/RIOT-Engineering-Archive",
-  "source_commit": "38c3ea78083faefb61e2371f0d3ab0d3f6cd6c05",
-  "source_date": "2026-10-24T12:34:18+02:00",
+  "source_commit": "0ca20a278859abdbaf2edcedd41488d5451f2554",
+  "source_date": "2026-10-24T13:01:56+02:00",
   "published_files": [
-    "crazy-ideas/ci-003-orion-inspired-class-ab-bjt-muscle-amp.html",
-    "crazy-ideas/index.html",
-    "docs/HANMATEK_DOS1102S_Quick_Guide.html",
-    "docs/RIOT_Digital_Audio_Chain_Dossier.html",
-    "docs/RIOT_Electric_Ballroom_Project_Index.html",
-    "docs/RIOT_Headbanger_Rev_A_Engineering_Dossier.html",
-    "docs/RIOT_Orion_GX2150_Repair_Reverse_Engineering_Dossier.html",
-    "docs/RIOT_Power_Supply_and_Grounding_Dossier.html",
-    "docs/index.html",
-    "index.html",
-    "knowledge.html",
-    "project.html",
-    "repository.html"
+    "docs/HANMATEK_DOS1102S_Quick_Guide.html"
   ],
   "private_sources_included": false
 }
