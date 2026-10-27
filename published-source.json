@@ -1,13 +1,9 @@
 {
   "source_repository": "eager4AI/RIOT-Engineering-Archive",
-  "source_commit": "5bb955ce31a93fe711e015ba6c4381257ca02dab",
-  "source_date": "2026-10-27T14:20:11+01:00",
+  "source_commit": "697c9880ade31c8bf76b030d0a4ab0eb10dba2e4",
+  "source_date": "2026-10-27T14:59:55+01:00",
   "published_files": [
-    "bom.html",
-    "docs/HANMATEK_DOS1102S_Quick_Guide.html",
-    "docs/RIOT_Loudspeaker_Systems_Dossier.html",
-    "docs/RIOT_Power_Supply_and_Grounding_Dossier.html",
-    "knowledge.html",
+    "index.html",
     "project.html"
   ],
   "private_sources_included": false
