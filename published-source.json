@@ -1,10 +1,9 @@
 {
   "source_repository": "eager4AI/RIOT-Engineering-Archive",
-  "source_commit": "4301a851a9f0e6518163113a14e3eed97d8dbe3a",
-  "source_date": "2026-10-28T22:20:19+01:00",
+  "source_commit": "8e7c0a86fc4601c5f0b7df99f4a8b3caba493edc",
+  "source_date": "2026-10-28T23:00:40+01:00",
   "published_files": [
     "docs/RIOT_Headbanger_Rev_A_Engineering_Dossier.html",
-    "index.html",
     "project.html"
   ],
   "private_sources_included": false
