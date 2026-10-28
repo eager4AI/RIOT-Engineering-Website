@@ -1,10 +1,14 @@
 {
   "source_repository": "eager4AI/RIOT-Engineering-Archive",
-  "source_commit": "8e7c0a86fc4601c5f0b7df99f4a8b3caba493edc",
-  "source_date": "2026-10-28T23:00:40+01:00",
+  "source_commit": "dd0a0a7246701116c71c82ec90b1ba3833aad4c8",
+  "source_date": "2026-10-28T22:55:09+01:00",
   "published_files": [
     "docs/RIOT_Headbanger_Rev_A_Engineering_Dossier.html",
     "project.html"
   ],
-  "private_sources_included": false
+  "private_sources_included": false,
+  "withheld_project_records": [
+    "tube-headbanger"
+  ],
+  "projection_tool_commit": "0b08cf6ae49b983360f7b5f3873523f0f35a5f4f"
 }
